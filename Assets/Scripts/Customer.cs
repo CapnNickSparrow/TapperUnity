@@ -22,8 +22,6 @@ public class Customer : MonoBehaviour
     public bool IsSliding;
     public bool IsDistracted;
     public bool IsDrinking;
-
-
     public bool CanDrink
     {
         get
@@ -73,21 +71,21 @@ public class Customer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ReturnBeerOnNextUpdate)
+        if (ReturnBeerOnNextUpdate && !GameManager.instance.Oops)
         {
             StartCoroutine(SpawnEmptyBeerMug());
             ReturnBeerOnNextUpdate = false;
             return;
         }
 
-        if (RandomMoveTime == 0)
+        if (RandomMoveTime == 0 && !GameManager.instance.Oops)
         {
             RandomMoveTime = Random.Range(MinMoveTime, MaxMoveTime);
         }
 
         MoveForward();
         
-        if (currentMoveTime >= RandomMoveTime)
+        if (currentMoveTime >= RandomMoveTime && !GameManager.instance.Oops)
         {            
             StartCoroutine(DelayMovement());
         }
@@ -119,13 +117,16 @@ public class Customer : MonoBehaviour
             return;
         }
 
-        Vector2 start = transform.position;
-        Vector2 end = start + new Vector2(HorionztalDir, 0);
+        if (!GameManager.instance.Oops)
+        {
+            Vector2 start = transform.position;
+            Vector2 end = start + new Vector2(HorionztalDir, 0);
 
-        Vector3 newPos = Vector3.MoveTowards(rBody.position, end, MoveSpeed * Time.deltaTime);
-        rBody.MovePosition(newPos);
+            Vector3 newPos = Vector3.MoveTowards(rBody.position, end, MoveSpeed * Time.deltaTime);
+            rBody.MovePosition(newPos);
 
-        currentMoveTime += Time.deltaTime;
+            currentMoveTime += Time.deltaTime;   
+        }
     }
 
     void StartSliding()
@@ -140,37 +141,41 @@ public class Customer : MonoBehaviour
 
     protected IEnumerator SlideBack()
     {
-        IsSliding = true;
-
-        float randomSlideDist = Random.Range(MinSlideDistance, MaxSlideDistance);
-
-        Vector2 startPosition = transform.position;
-        Vector2 finalPosition = startPosition + new Vector2(HorionztalDir * -1 * randomSlideDist, 0);
-
-
-        float distanceThreshold = 0.15f;
-
-        while (Vector2.Distance(transform.position, finalPosition) > distanceThreshold)
+        if (!GameManager.instance.Oops)
         {
-            Vector2 currentPos = transform.position;
-            Vector2 end = currentPos + new Vector2(HorionztalDir * -1, 0);
+            IsSliding = true;
 
-            Vector2 nextPosition = Vector3.MoveTowards(rBody.position, end, SlideSpeed * Time.deltaTime);
-            rBody.MovePosition(nextPosition);
+            float randomSlideDist = Random.Range(MinSlideDistance, MaxSlideDistance);
 
-            yield return null;
+            Vector2 startPosition = transform.position;
+            Vector2 finalPosition = startPosition + new Vector2(HorionztalDir * -1 * randomSlideDist, 0);
+
+
+            float distanceThreshold = 0.15f;
+
+            while (Vector2.Distance(transform.position, finalPosition) > distanceThreshold)
+            {
+                Vector2 currentPos = transform.position;
+                Vector2 end = currentPos + new Vector2(HorionztalDir * -1, 0);
+
+                Vector2 nextPosition = Vector3.MoveTowards(rBody.position, end, SlideSpeed * Time.deltaTime);
+                rBody.MovePosition(nextPosition);
+
+                yield return null;
+            }
+
+            IsSliding = false;
+
+            yield return DrinkBeer();
         }
 
-        IsSliding = false;
-
-        yield return DrinkBeer();
     }
 
     protected IEnumerator DrinkBeer()
     {
         IsDrinking = true;
         animator.SetBool("isDrinking", IsDrinking);
-
+        
         float randomDrinkTime = Random.Range(MinDrinkTime, MaxDrinkTime);
         yield return new WaitForSeconds(randomDrinkTime);
 
@@ -183,20 +188,23 @@ public class Customer : MonoBehaviour
     protected IEnumerator SpawnEmptyBeerMug()
     {
         // wait until customer is finished sliding or drinking before spawning beer
-        while (IsSliding || IsDrinking)
+        if (!GameManager.instance.Oops)
         {
-            yield return null;
+            while (IsSliding || IsDrinking)
+            {
+                yield return null;
+            }
+
+            float beerOffsetX = 0.25f;
+            float beerOffsetY = -0.35f;
+
+            GameObject beerObj = Instantiate(BeerPrefab, transform.position + new Vector3(beerOffsetX * HorionztalDir, beerOffsetY, 0), transform.rotation);
+            Beer beer = beerObj.GetComponent<Beer>();
+            beer.HorionztalDir = HorionztalDir;
+            beer.IsFilled = false;
+            beer.Speed = GameManager.instance.levelManager.GetPlayerBeerSpeed() * 0.5f;
+            beer.TapIndex = this.TapIndex;   
         }
-
-        float beerOffsetX = 0.25f;
-        float beerOffsetY = -0.35f;
-
-        GameObject beerObj = Instantiate(BeerPrefab, transform.position + new Vector3(beerOffsetX * HorionztalDir, beerOffsetY, 0), transform.rotation);
-        Beer beer = beerObj.GetComponent<Beer>();
-        beer.HorionztalDir = HorionztalDir;
-        beer.IsFilled = false;
-        beer.Speed = GameManager.instance.levelManager.GetPlayerBeerSpeed() * 0.5f;
-        beer.TapIndex = this.TapIndex;
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
@@ -215,7 +223,8 @@ public class Customer : MonoBehaviour
         if (collider.gameObject.CompareTag("Exit") && (IsDrinking || IsSliding))
         {
             Destroy(this.gameObject);
-            GameManager.instance.AddToCurrentPlayerScore(ScoreKey.Customer);            
+            GameManager.instance.AddToCurrentPlayerScore(ScoreKey.Customer);      
+            GameManager.instance.HappyCustomer++;
         }
 
         if (collider.gameObject.CompareTag("BarEnd") && !IsDrinking)

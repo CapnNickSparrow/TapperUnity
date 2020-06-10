@@ -76,22 +76,37 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        IsRunning = false;
+        if (GameManager.instance.HasLevelStarted && (GameManager.instance.levelManager.PlayerMissedCustomer ||
+                                                     GameManager.instance.levelManager.PlayerMissedEmptyMug ||
+                                                     GameManager.instance.levelManager.PlayerThrewExtraMug))
+        {
+            GameManager.instance.Oops = true;
+        }
+        if (GameManager.instance.HasLevelStarted && !GameManager.instance.Oops && animator.GetBool("hasLost") == false) 
+        {
+            IsRunning = false;
 
-        horizontalInput = (int)Input.GetAxisRaw("Horizontal");
-        verticalInput = (int)Input.GetAxisRaw("Vertical");
+            horizontalInput = (int)Input.GetAxisRaw("Horizontal");
+            verticalInput = (int)Input.GetAxisRaw("Vertical");
 
-        pourPressed = Input.GetButton("Pour");
-        servePressed = Input.GetButtonDown("Serve");
+            pourPressed = Input.GetButton("Pour");
+            servePressed = Input.GetButtonDown("Serve");
 
-        StopFillingBeerIfMoving(horizontalInput, verticalInput);
+            StopFillingBeerIfMoving(horizontalInput, verticalInput);
         
-        AttemptMove(horizontalInput, verticalInput);
-        animator.SetBool("isRunning", IsRunning);
+            AttemptMove(horizontalInput, verticalInput);
+            animator.SetBool("isRunning", IsRunning);
 
-        CheckIfAtBarTap();
+            CheckIfAtBarTap();
 
-        FlipSpriteBasedOnHorizontalInput(horizontalInput);
+            FlipSpriteBasedOnHorizontalInput(horizontalInput);
+        }
+        
+        else if (GameManager.instance.HasLevelStarted && GameManager.instance.Oops && !GameManager.instance.OopsC) 
+        {
+            TriggerLostAnimation();
+            GameManager.instance.OopsC = true;
+        }
     }
 
     void LateUpdate()
@@ -467,5 +482,18 @@ public class Player : MonoBehaviour
     public void TriggerMissAnimation()
     {
         animator.SetTrigger("playerMiss");
+    }
+    
+    public void TriggerLostAnimation()
+    {
+        animator.SetBool("hasLost", true);
+        StartCoroutine("LostAnim");
+    }
+    
+    protected IEnumerator LostAnim()
+    {
+        yield return new WaitForSeconds(15);
+        animator.SetBool("hasLost", false);
+        GameManager.instance.PlayerLost();
     }
 }

@@ -31,7 +31,9 @@ public class BarExit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GetCustomerCount() < CustomerLimit && cooldownTimer >= SpawnCoolDownTime)
+        if (GetCustomerCount() < CustomerLimit && cooldownTimer >= SpawnCoolDownTime && GameManager.instance.HasLevelStarted && (!GameManager.instance.levelManager.PlayerMissedCustomer ||
+                                                                                                                                 !GameManager.instance.levelManager.PlayerMissedEmptyMug ||
+                                                                                                                                 !GameManager.instance.levelManager.PlayerThrewExtraMug))
         {
             SpawnCustomer();
             cooldownTimer = 0;

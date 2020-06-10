@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.XR.Interaction;
 using UnityEngine.SceneManagement;
 
 public enum ScoreKey
@@ -48,11 +49,14 @@ public class GameManager : MonoBehaviour
             return _scoreTable;
         }
     }
+    public int HappyCustomer;
 
     public GameMode SelectedGameMode;
 
     public bool HasLevelStarted;
-
+    public bool Oops;
+    public bool OopsC;
+    
     public int CurrentPlayer = 1;
 
     public int PlayerOneScore;
@@ -63,7 +67,6 @@ public class GameManager : MonoBehaviour
     public int PlayerTwoScore;
     public int PlayerTwoCurrentLevel;
     public int PlayerTwoLives;
-
     void OnEnable()
     {
         //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
@@ -134,25 +137,27 @@ public class GameManager : MonoBehaviour
             SelectedGameMode = GameMode.SinglePlayer;
         }
 
+        Oops = false;
+        OopsC = false;
+        
+        HappyCustomer = 0;
+        
         CurrentPlayer = 1;
-
-        PlayerOneScore = 0;
+        
         levelUIManager.SetPlayerOneScoreText(PlayerOneScore);
-
-
-        PlayerTwoScore = 0;
+        
         levelUIManager.SetPlayerTwoScoreText(PlayerTwoScore);
 
-        PlayerOneCurrentLevel = 1;
-        PlayerTwoCurrentLevel = 1;
+        PlayerOneCurrentLevel = levelManager.level;
+        PlayerTwoCurrentLevel = levelManager.level;
         levelUIManager.SetCurrentLevelText(PlayerOneCurrentLevel);
 
         PlayerOneLives = 3;
         PlayerTwoLives = 3;
 
-        levelManager.CurrentLevel = levelManager.AllLevels[0];
+        levelManager.CurrentLevel = levelManager.AllLevels[levelManager.level - 1];
 
-        SceneManager.LoadScene("Level1");
+        SceneManager.LoadScene("Level" + levelManager.level);
     }
 
     internal void AddToCurrentPlayerScore(ScoreKey toAdd)
@@ -161,9 +166,22 @@ public class GameManager : MonoBehaviour
         {
             AddToPlayerOneScore(toAdd);
         }
-        else
+        else if (CurrentPlayer == 2)
         {
             AddToPlayerTwoScore(toAdd);
+        }
+        if (HappyCustomer >= 20)
+        {
+            levelManager.level++;
+            if (SelectedGameMode == GameMode.TwoPlayer)
+            {
+                StartGame(isTwoPlayer: true);    
+            }
+                
+            else if (GameManager.instance.SelectedGameMode != GameMode.TwoPlayer)
+            {
+                StartGame(isTwoPlayer: false);    
+            }
         }
     }
 
@@ -180,7 +198,7 @@ public class GameManager : MonoBehaviour
     }
 
     
-    internal void PlayerLost()
+    public void PlayerLost()
     {
         // Lose a life
         if (CurrentPlayer == 1)
@@ -193,8 +211,6 @@ public class GameManager : MonoBehaviour
             PlayerTwoLives--;
             Debug.Log(string.Format("Player 2 Lives: {0}", PlayerTwoLives));
         }
-
-
 
         // switch players if two player
         if (SelectedGameMode == GameMode.TwoPlayer)

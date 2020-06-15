@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
     public GameObject BeerPrefab;
 
     public LayerMask blockingLayer;
@@ -36,11 +35,10 @@ public class Player : MonoBehaviour
     public bool IsFillingBeer;
     public bool IsIdleWithBeer;
 
-
     private Rigidbody2D rBody;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
-    private Animator animator;
+    public Animator animator;
     private int levelScore;
 
     private int horizontalInput;
@@ -50,7 +48,7 @@ public class Player : MonoBehaviour
 
 
     // Start is called before the first frame update
-    protected void Start()
+    public void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
         rBody = GetComponent<Rigidbody2D>();
@@ -82,7 +80,7 @@ public class Player : MonoBehaviour
         {
             GameManager.instance.Oops = true;
         }
-        if (GameManager.instance.HasLevelStarted && !GameManager.instance.Oops && animator.GetBool("hasLost") == false) 
+        if (GameManager.instance.HasLevelStarted && !GameManager.instance.Oops && animator.GetBool("hasLost") == false && animator.GetBool("hasWon") == false) 
         {
             IsRunning = false;
 
@@ -492,6 +490,7 @@ public class Player : MonoBehaviour
     
     protected IEnumerator LostAnim()
     {
+        GameManager.instance.IsGameWon = false;
         yield return new WaitForSeconds(15);
         animator.SetBool("hasLost", false);
         GameManager.instance.PlayerLost();

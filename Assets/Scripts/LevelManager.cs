@@ -181,38 +181,38 @@ public class LevelManager : MonoBehaviour
         LevelSettings level2 = new LevelSettings()
         {
             Level = 2,
-            PlayerBeerSpeed = 6.0f,
-            CustomerMoveSpeed = 2.5f,
-            CustomerSlideSpeed = 6
+            PlayerBeerSpeed = 6.25f,
+            CustomerMoveSpeed = 2.25f,
+            CustomerSlideSpeed = 5.25f
         };
         level2.SetCustomerMoveTimes(0.5f, 1.0f);
         level2.SetCustomerStopTimes(1f, 1.5f);
         level2.SetCustomerDrinkTimes(1.0f, 2.0f);
-        level2.SetCustomerSlideDistances(6.0f, 8.0f);
+        level2.SetCustomerSlideDistances(6.0f, 7.25f);
 
-        level2.AddCustomersToBarTap(1, new List<float>() { 0.25f, 1.25f });
-        level2.AddCustomersToBarTap(2, new List<float>() { 0.25f, 1.25f });
-        level2.AddCustomersToBarTap(3, new List<float>() { 0.25f, 1.25f });
-        level2.AddCustomersToBarTap(4, new List<float>() { 0.25f, 1.25f });
+        level2.AddCustomersToBarTap(1, new List<float>() { 0.25f, 0.75f });
+        level2.AddCustomersToBarTap(2, new List<float>() { 0.25f, 1.75f });
+        level2.AddCustomersToBarTap(3, new List<float>() { 0.25f, 1.75f });
+        level2.AddCustomersToBarTap(4, new List<float>() { 0.25f, 1.75f });
 
         AllLevels.Add(level2);
         
         LevelSettings level3 = new LevelSettings()
         {
             Level = 3,
-            PlayerBeerSpeed = 7.5f,
-            CustomerMoveSpeed = 3.75f,
-            CustomerSlideSpeed = 8
+            PlayerBeerSpeed = 6.5f,
+            CustomerMoveSpeed = 2.75f,
+            CustomerSlideSpeed = 6
         };
         level3.SetCustomerMoveTimes(0.6f, 1.25f);
         level3.SetCustomerStopTimes(1.2f, 1.8f);
         level3.SetCustomerDrinkTimes(1.25f, 2.5f);
-        level3.SetCustomerSlideDistances(7.5f, 10.0f);
+        level3.SetCustomerSlideDistances(6.5f, 7.5f);
 
-        level3.AddCustomersToBarTap(1, new List<float>() { 0.5f, 1.5f });
-        level3.AddCustomersToBarTap(2, new List<float>() { 0.5f, 1.5f });
-        level3.AddCustomersToBarTap(3, new List<float>() { 0.5f, 1.5f });
-        level3.AddCustomersToBarTap(4, new List<float>() { 0.5f, 1.5f });
+        level3.AddCustomersToBarTap(1, new List<float>() { 0.5f, 1.25f });
+        level3.AddCustomersToBarTap(2, new List<float>() { 0.5f, 1.25f });
+        level3.AddCustomersToBarTap(3, new List<float>() { 0.5f, 1.25f });
+        level3.AddCustomersToBarTap(4, new List<float>() { 0.5f, 1.25f });
 
         AllLevels.Add(level3);
     }

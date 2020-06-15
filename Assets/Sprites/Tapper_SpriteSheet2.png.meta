@@ -34,7 +34,7 @@ TextureImporter:
     second: Tapper_Lose10
   - first:
       213: 2483244758904292432
-    second: Tapper_SpriteSheet2_1
+    second: Tapper_End_2
   - first:
       213: -479896789452262203
     second: Tapper_Lose11
@@ -44,6 +44,36 @@ TextureImporter:
   - first:
       213: 1009903584515149259
     second: Tapper_Lose13
+  - first:
+      213: 9113344830929312364
+    second: Tapper_Win_0
+  - first:
+      213: 6270827496977881959
+    second: Tapper_Win_1
+  - first:
+      213: 7939898270272690256
+    second: Tapper_Win_2
+  - first:
+      213: -4712698981791525408
+    second: Tapper_Win_3
+  - first:
+      213: 7088703389758037003
+    second: Tapper_Win_4
+  - first:
+      213: -1793512657246868226
+    second: Tapper_Win_5
+  - first:
+      213: 1673350685434312844
+    second: Tapper_End_0
+  - first:
+      213: -340049839309311868
+    second: Tapper_End_1
+  - first:
+      213: 401258633833981972
+    second: Tapper_SpriteSheet2_0
+  - first:
+      213: -1029157302083900471
+    second: Tapper_End_3
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -412,7 +442,7 @@ TextureImporter:
         width: 29
         height: 60
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -420,6 +450,237 @@ TextureImporter:
       bones: []
       spriteID: bcd4b6c95f5e30e00800000000000000
       internalID: 1009903584515149259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_Win_0
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 642
+        width: 35
+        height: 62
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6a1f23d6da197e70800000000000000
+      internalID: 9113344830929312364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_Win_1
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 644
+        width: 36
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 76b5e1d5264760750800000000000000
+      internalID: 6270827496977881959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_Win_2
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 644
+        width: 30
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0589750d86f203e60800000000000000
+      internalID: 7939898270272690256
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_Win_3
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 646
+        width: 37
+        height: 59
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0e598f8be31299eb0800000000000000
+      internalID: -4712698981791525408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_Win_4
+      rect:
+        serializedVersion: 2
+        x: 299
+        y: 646
+        width: 29
+        height: 60
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0c92a8ec22206260800000000000000
+      internalID: 7088703389758037003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_Win_5
+      rect:
+        serializedVersion: 2
+        x: 333
+        y: 644
+        width: 30
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efc22ac9db92c17e0800000000000000
+      internalID: -1793512657246868226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_End_0
+      rect:
+        serializedVersion: 2
+        x: 169
+        y: 0
+        width: 68
+        height: 81
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c88f7f5259fe83710800000000000000
+      internalID: 1673350685434312844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_End_1
+      rect:
+        serializedVersion: 2
+        x: 238
+        y: 0
+        width: 65
+        height: 83
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4803a0a0976e74bf0800000000000000
+      internalID: -340049839309311868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_SpriteSheet2_0
+      rect:
+        serializedVersion: 2
+        x: 308
+        y: 20
+        width: 59
+        height: 58
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 418abbcf99e819500800000000000000
+      internalID: 401258633833981972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_End_2
+      rect:
+        serializedVersion: 2
+        x: 302
+        y: 0
+        width: 65
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05447d093f1467220800000000000000
+      internalID: 2483244758904292432
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Tapper_End_3
+      rect:
+        serializedVersion: 2
+        x: 369
+        y: 2
+        width: 62
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9cb2a4fe2e2b7b1f0800000000000000
+      internalID: -1029157302083900471
       vertices: []
       indices: 
       edges: []

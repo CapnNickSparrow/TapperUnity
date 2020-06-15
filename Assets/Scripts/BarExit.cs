@@ -14,7 +14,8 @@ public class BarExit : MonoBehaviour
     private float cooldownTimer;
 
     public GameObject CustomerPrefab;
-
+    private GameObject Player;
+    
     public float MinOffsetX = 0.25f;
     public float MaxOffsetX = 1.2f;
 
@@ -22,6 +23,7 @@ public class BarExit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Player = GameObject.Find("Player");  
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         IsFlipped = renderer.flipX;   
         
@@ -33,7 +35,7 @@ public class BarExit : MonoBehaviour
     {
         if (GetCustomerCount() < CustomerLimit && cooldownTimer >= SpawnCoolDownTime && GameManager.instance.HasLevelStarted && (!GameManager.instance.levelManager.PlayerMissedCustomer ||
                                                                                                                                  !GameManager.instance.levelManager.PlayerMissedEmptyMug ||
-                                                                                                                                 !GameManager.instance.levelManager.PlayerThrewExtraMug))
+                                                                                                                                 !GameManager.instance.levelManager.PlayerThrewExtraMug) && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             SpawnCustomer();
             cooldownTimer = 0;

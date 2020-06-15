@@ -62,6 +62,7 @@
      <Compile Include="Assets\Scripts\BarTap.cs" />
      <Compile Include="Assets\Scripts\Beer.cs" />
      <Compile Include="Assets\Scripts\Customer.cs" />
+     <Compile Include="Assets\Scripts\DDestroy.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\LevelManager.cs" />
      <Compile Include="Assets\Scripts\LevelUIManager.cs" />

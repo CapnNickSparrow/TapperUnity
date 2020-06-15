@@ -11,6 +11,7 @@
           <e p="BarTap.cs" t="Include" />
           <e p="Beer.cs" t="Include" />
           <e p="Customer.cs" t="Include" />
+          <e p="DDestroy.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="LevelManager.cs" t="Include" />
           <e p="LevelUIManager.cs" t="Include" />

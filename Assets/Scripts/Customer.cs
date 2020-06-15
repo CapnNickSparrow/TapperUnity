@@ -35,6 +35,8 @@ public class Customer : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
 
+    private GameObject Player;
+    
     private float currentMoveTime;
     public float RandomMoveTime;
 
@@ -51,6 +53,7 @@ public class Customer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Player = GameObject.Find("Player"); 
         IsDistracted = false;
         IsDrinking = false;
         IsSliding = false;
@@ -71,21 +74,21 @@ public class Customer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (ReturnBeerOnNextUpdate && !GameManager.instance.Oops)
+        if (ReturnBeerOnNextUpdate && !GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             StartCoroutine(SpawnEmptyBeerMug());
             ReturnBeerOnNextUpdate = false;
             return;
         }
 
-        if (RandomMoveTime == 0 && !GameManager.instance.Oops)
+        if (RandomMoveTime == 0 && !GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             RandomMoveTime = Random.Range(MinMoveTime, MaxMoveTime);
         }
 
         MoveForward();
         
-        if (currentMoveTime >= RandomMoveTime && !GameManager.instance.Oops)
+        if (currentMoveTime >= RandomMoveTime && !GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {            
             StartCoroutine(DelayMovement());
         }
@@ -117,7 +120,7 @@ public class Customer : MonoBehaviour
             return;
         }
 
-        if (!GameManager.instance.Oops)
+        if (!GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             Vector2 start = transform.position;
             Vector2 end = start + new Vector2(HorionztalDir, 0);
@@ -141,7 +144,7 @@ public class Customer : MonoBehaviour
 
     protected IEnumerator SlideBack()
     {
-        if (!GameManager.instance.Oops)
+        if (!GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             IsSliding = true;
 
@@ -188,7 +191,7 @@ public class Customer : MonoBehaviour
     protected IEnumerator SpawnEmptyBeerMug()
     {
         // wait until customer is finished sliding or drinking before spawning beer
-        if (!GameManager.instance.Oops)
+        if (!GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             while (IsSliding || IsDrinking)
             {

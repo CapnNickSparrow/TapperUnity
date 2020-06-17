@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Beer : MonoBehaviour
 {
-
+    private AudioSource Break;
+    
     public bool IsFilled;
 
     public bool IsShattered;
@@ -30,6 +31,8 @@ public class Beer : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
 
+        Break = GetComponent<AudioSource>();
+        
         if (!IsFilled)
         {
             animator.SetTrigger("emptyBeer");
@@ -53,7 +56,10 @@ public class Beer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
+        if (!GameManager.instance.NotDone && !GameManager.instance.Oops)
+        {
+            Move();   
+        }
     }
 
     void Move()
@@ -74,18 +80,21 @@ public class Beer : MonoBehaviour
     {
         if (collider.gameObject.CompareTag("Exit") && IsFilled)
         {
+            GameManager.instance.NotDone = true;
+            Break.Play();
             StartCoroutine(ShatterBeer());
         }
 
-        if (collider.gameObject.CompareTag("BarEnd") && !IsFilled)
+        if (collider.gameObject.CompareTag("BarEnd") && !IsFilled && !GameManager.instance.NotDone)
         {
             if (GameManager.instance.levelManager.IsPlayerAtBarTap(TapIndex))
             {
-                Destroy(this.gameObject);
                 GameManager.instance.AddToCurrentPlayerScore(ScoreKey.EmptyMug);
+                Destroy(this.gameObject);
             }
             else
             {
+                GameManager.instance.NotDone = true;
                 StartCoroutine(DropBeerFromBar());
             }
         }
@@ -93,6 +102,8 @@ public class Beer : MonoBehaviour
 
     protected IEnumerator DropBeerFromBar()
     {
+        GameManager.instance.levelManager.PlayerMissedEmptyMug = true;
+        
         float waitTime = 0f;
         while (waitTime < 0.45f)
         {
@@ -124,8 +135,6 @@ public class Beer : MonoBehaviour
         
         yield return new WaitForSeconds(0.75f);
 
-        GameManager.instance.levelManager.PlayerMissedEmptyMug = true;
-
         Destroy(this.gameObject);
     }
 
@@ -135,7 +144,7 @@ public class Beer : MonoBehaviour
         animator.SetTrigger("shatterBeer");
 
         TriggerPlayerMissAnimation();
-
+        Break.Play();
         yield return new WaitForSeconds(1.0f);
 
         GameManager.instance.levelManager.PlayerThrewExtraMug = true;

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Customer : MonoBehaviour
 {
+    private AudioSource Drink;
+    
     public GameObject BeerPrefab;
     public int TapIndex;
 
@@ -36,6 +38,8 @@ public class Customer : MonoBehaviour
     private Animator animator;
 
     private GameObject Player;
+
+    private int Char;
     
     private float currentMoveTime;
     public float RandomMoveTime;
@@ -66,8 +70,13 @@ public class Customer : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
         rBody = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        animator = GetComponent<Animator>();    
+        animator = GetComponent<Animator>();
 
+        Char = Random.Range(0, 7);
+        animator.SetInteger("Idle", Char);
+
+        Drink = GetComponent<AudioSource>();
+        
         spriteRenderer.flipX = (HorionztalDir == -1);
     }
 
@@ -213,11 +222,12 @@ public class Customer : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collider)
     {
         
-        if (collider.gameObject.CompareTag("Beer") && CanDrink)
+        if (collider.gameObject.CompareTag("Beer") && CanDrink && !GameManager.instance.NotDone)
         {
             Beer beer = collider.GetComponent<Beer>();
             if (beer.IsFilled) 
             {
+                Drink.Play();
                 Destroy(beer.gameObject);
                 StartSliding();
             }
@@ -225,9 +235,20 @@ public class Customer : MonoBehaviour
 
         if (collider.gameObject.CompareTag("Exit") && (IsDrinking || IsSliding))
         {
-            Destroy(this.gameObject);
-            GameManager.instance.AddToCurrentPlayerScore(ScoreKey.Customer);      
+            if (Char >= 0 && Char < 3)
+            {
+                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.Customer);    
+            }
+            if (Char >= 3 && Char < 6)
+            {
+                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.HardCustomer);    
+            }
+            if (Char == 6)
+            {
+                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.HarderCustomer);    
+            }
             GameManager.instance.HappyCustomer++;
+            Destroy(this.gameObject);
         }
 
         if (collider.gameObject.CompareTag("BarEnd") && !IsDrinking)

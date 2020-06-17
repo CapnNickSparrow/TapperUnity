@@ -50,6 +50,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -61,6 +62,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -124,10 +126,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TapIndex: 0
   IsFlipped: 0
-  CustomerLimit: 2
-  SpawnCoolDownTime: 5
+  CustomerLimit: 3
+  SpawnCoolDownTime: 8.5
+  cooldownTimer: 0
   CustomerPrefab: {fileID: 1018221837947807538, guid: 308d9bd8a57eae1428b551a764a7befa,
     type: 3}
+  MinOffsetX: 0.25
+  MaxOffsetX: 1.2
 --- !u!1001 &3705001762410573957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -135,11 +140,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8764987742670564179}
     m_Modifications:
-    - target: {fileID: 8703099678576936187, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
-        type: 3}
-      propertyPath: m_Name
-      value: Bar (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 8703099678576936185, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -195,6 +195,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8703099678576936187, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
+        type: 3}
+      propertyPath: m_Name
+      value: Bar (2)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98fa3f6a5e0e0864fb881a67791b53e0, type: 3}
 --- !u!4 &5453103178243945596 stripped
@@ -210,11 +215,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8764987742670564179}
     m_Modifications:
-    - target: {fileID: 8703099678576936187, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
-        type: 3}
-      propertyPath: m_Name
-      value: Bar
-      objectReference: {fileID: 0}
     - target: {fileID: 8703099678576936185, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -270,6 +270,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8703099678576936187, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
+        type: 3}
+      propertyPath: m_Name
+      value: Bar
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98fa3f6a5e0e0864fb881a67791b53e0, type: 3}
 --- !u!4 &3784042013323550193 stripped
@@ -285,11 +290,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8764987742670564179}
     m_Modifications:
-    - target: {fileID: 8703099678576936187, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
-        type: 3}
-      propertyPath: m_Name
-      value: Bar (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 8703099678576936185, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -344,6 +344,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8703099678576936187, guid: 98fa3f6a5e0e0864fb881a67791b53e0,
+        type: 3}
+      propertyPath: m_Name
+      value: Bar (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 98fa3f6a5e0e0864fb881a67791b53e0, type: 3}

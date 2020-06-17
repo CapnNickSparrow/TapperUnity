@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,8 +9,10 @@ public class BarExit : MonoBehaviour
     public bool IsFlipped;
 
     public int CustomerLimit;
-
-    public float SpawnCoolDownTime;
+    
+    [SerializeField]
+    private float SpawnCoolDownTime;
+    [SerializeField]
     private float cooldownTimer;
 
     public GameObject CustomerPrefab;
@@ -23,6 +25,18 @@ public class BarExit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (GameManager.instance.levelManager.level == 1)
+        {
+            SpawnCoolDownTime = 7.8f;
+        }
+        else if (GameManager.instance.levelManager.level == 2)
+        {
+            SpawnCoolDownTime = 6.6f;
+        }
+        else if (GameManager.instance.levelManager.level == 3)
+        {
+            SpawnCoolDownTime = 5.8f;
+        }
         Player = GameObject.Find("Player");  
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         IsFlipped = renderer.flipX;   
@@ -33,9 +47,7 @@ public class BarExit : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GetCustomerCount() < CustomerLimit && cooldownTimer >= SpawnCoolDownTime && GameManager.instance.HasLevelStarted && (!GameManager.instance.levelManager.PlayerMissedCustomer ||
-                                                                                                                                 !GameManager.instance.levelManager.PlayerMissedEmptyMug ||
-                                                                                                                                 !GameManager.instance.levelManager.PlayerThrewExtraMug) && Player.GetComponent<Animator>().GetBool("hasWon") == false)
+        if (GetCustomerCount() < CustomerLimit && cooldownTimer >= SpawnCoolDownTime && GameManager.instance.HasLevelStarted && !GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             SpawnCustomer();
             cooldownTimer = 0;

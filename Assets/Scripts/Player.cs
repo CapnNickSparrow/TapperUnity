@@ -25,6 +25,14 @@ public class Player : MonoBehaviour
     public float FillSpeed = 0.075f;
     public int FillPercent = 0;
 
+    public AudioSource Fill1;
+    public AudioSource Fill2;
+    public AudioSource Full;
+    public AudioSource Win;
+    public AudioSource Lose;
+    public AudioSource Up;
+    public AudioSource Throw;
+    
     public float FillOffset
     {
         get
@@ -83,11 +91,12 @@ public class Player : MonoBehaviour
         if (GameManager.instance.HasLevelStarted && !GameManager.instance.Oops && animator.GetBool("hasLost") == false && animator.GetBool("hasWon") == false) 
         {
             IsRunning = false;
+            IsRunning = false;
 
             horizontalInput = (int)Input.GetAxisRaw("Horizontal");
             verticalInput = (int)Input.GetAxisRaw("Vertical");
 
-            pourPressed = Input.GetButton("Pour");
+            pourPressed = Input.GetButtonDown("Pour");
             servePressed = Input.GetButtonDown("Serve");
 
             StopFillingBeerIfMoving(horizontalInput, verticalInput);
@@ -130,7 +139,8 @@ public class Player : MonoBehaviour
         {
             yield break;
         }
-
+        Throw.Play();
+        
         IsServing = true;
         FillPercent = 0;
         IsFillingBeer = false;
@@ -270,6 +280,7 @@ public class Player : MonoBehaviour
 
     protected IEnumerator ShiftToBarTapAndFillBeer()
     {
+        Up.Play();
         ShiftToNextBarTap(0); // 0 will cause to shift to current bar tap
 
         // wait until done shifting before filling beer
@@ -288,12 +299,23 @@ public class Player : MonoBehaviour
 
         while (IsFillingBeer && !IsIdleWithBeer && FillPercent <= 100 && !IsShifting)
         {
-            FillPercent += 10;
+            FillPercent += 20;
             yield return new WaitForSeconds(FillSpeed);
         }
 
-        if (FillPercent > 100)
+        if (FillPercent >=1 && FillPercent <=49)
         {
+            Fill1.Play();
+        }
+
+        if (FillPercent >=50 && FillPercent <=99)
+        {
+            Fill2.Play();
+        }
+        
+        if (FillPercent >= 100)
+        {
+            Full.Play();
             FillPercent = 100;
         }
 
@@ -339,6 +361,7 @@ public class Player : MonoBehaviour
         {
             if (!IsShifting && yDir != 0)
             {
+                Up.Play();
                 ShiftToNextBarTap(yDir);
             } 
             else if (xDir != 0 && !IsFillingBeer)
@@ -484,8 +507,14 @@ public class Player : MonoBehaviour
     
     public void TriggerLostAnimation()
     {
+        Lose.Play();
         animator.SetBool("hasLost", true);
         StartCoroutine("LostAnim");
+    }
+
+    public void WinTune()
+    {
+        Win.Play();
     }
     
     protected IEnumerator LostAnim()

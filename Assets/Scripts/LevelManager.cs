@@ -32,16 +32,8 @@ public class LevelManager : MonoBehaviour
     void Update()
     {
         ShowAllBarTaps();
-        // CheckIfPlayerLost();
     }
-
-    // private void CheckIfPlayerLost()
-    // {
-    //     if (PlayerMissedCustomer || PlayerMissedEmptyMug || PlayerThrewExtraMug)
-    //     {
-    //         GameManager.instance.PlayerLost();
-    //     }
-    // }
+    
 
     private void ShowAllBarTaps()
     {
@@ -162,14 +154,14 @@ public class LevelManager : MonoBehaviour
         LevelSettings level1 = new LevelSettings()
         {
             Level = 1,
-            PlayerBeerSpeed = 6.0f,
-            CustomerMoveSpeed = 2f,
+            PlayerBeerSpeed = 6,
+            CustomerMoveSpeed = 1.25f,
             CustomerSlideSpeed = 5
         };
-        level1.SetCustomerMoveTimes(0.5f, 1.0f);
-        level1.SetCustomerStopTimes(1.5f, 2f);
+        level1.SetCustomerMoveTimes(0.5f, 1);
+        level1.SetCustomerStopTimes(2, 3);
         level1.SetCustomerDrinkTimes(1.0f, 1.75f);
-        level1.SetCustomerSlideDistances(6.0f, 7.0f);
+        level1.SetCustomerSlideDistances(3, 6);
 
         level1.AddCustomersToBarTap(1, new List<float>() { 0.25f });
         level1.AddCustomersToBarTap(2, new List<float>() { 0.25f });
@@ -181,38 +173,38 @@ public class LevelManager : MonoBehaviour
         LevelSettings level2 = new LevelSettings()
         {
             Level = 2,
-            PlayerBeerSpeed = 6.25f,
-            CustomerMoveSpeed = 2.25f,
-            CustomerSlideSpeed = 5.25f
+            PlayerBeerSpeed = 6,
+            CustomerMoveSpeed = 1.5f,
+            CustomerSlideSpeed = 5
         };
-        level2.SetCustomerMoveTimes(0.5f, 1.0f);
-        level2.SetCustomerStopTimes(1f, 1.5f);
+        level2.SetCustomerMoveTimes(0.6f, 1.2f);
+        level2.SetCustomerStopTimes(2, 2.5f);
         level2.SetCustomerDrinkTimes(1.0f, 2.0f);
-        level2.SetCustomerSlideDistances(6.0f, 7.25f);
+        level2.SetCustomerSlideDistances(3, 6);
 
-        level2.AddCustomersToBarTap(1, new List<float>() { 0.25f, 0.75f });
-        level2.AddCustomersToBarTap(2, new List<float>() { 0.25f, 1.75f });
-        level2.AddCustomersToBarTap(3, new List<float>() { 0.25f, 1.75f });
-        level2.AddCustomersToBarTap(4, new List<float>() { 0.25f, 1.75f });
+        level2.AddCustomersToBarTap(1, new List<float>() { 0.25f, 1 });
+        level2.AddCustomersToBarTap(2, new List<float>() { 0.25f, 1 });
+        level2.AddCustomersToBarTap(3, new List<float>() { 0.25f, 1 });
+        level2.AddCustomersToBarTap(4, new List<float>() { 0.25f, 1 });
 
         AllLevels.Add(level2);
         
         LevelSettings level3 = new LevelSettings()
         {
             Level = 3,
-            PlayerBeerSpeed = 6.5f,
-            CustomerMoveSpeed = 2.75f,
-            CustomerSlideSpeed = 6
+            PlayerBeerSpeed = 6,
+            CustomerMoveSpeed = 1.75f,
+            CustomerSlideSpeed = 5
         };
-        level3.SetCustomerMoveTimes(0.6f, 1.25f);
-        level3.SetCustomerStopTimes(1.2f, 1.8f);
-        level3.SetCustomerDrinkTimes(1.25f, 2.5f);
-        level3.SetCustomerSlideDistances(6.5f, 7.5f);
+        level3.SetCustomerMoveTimes(0.75f, 1.25f);
+        level3.SetCustomerStopTimes(1.75f, 2.25f);
+        level3.SetCustomerDrinkTimes(0.75f, 2.25f);
+        level3.SetCustomerSlideDistances(3, 6);
 
-        level3.AddCustomersToBarTap(1, new List<float>() { 0.5f, 1.25f });
-        level3.AddCustomersToBarTap(2, new List<float>() { 0.5f, 1.25f });
-        level3.AddCustomersToBarTap(3, new List<float>() { 0.5f, 1.25f });
-        level3.AddCustomersToBarTap(4, new List<float>() { 0.5f, 1.25f });
+        level3.AddCustomersToBarTap(1, new List<float>() { 0.5f, 1.25f, 1.5f });
+        level3.AddCustomersToBarTap(2, new List<float>() { 0.5f, 1.25f, 1.5f });
+        level3.AddCustomersToBarTap(3, new List<float>() { 0.5f, 1.25f, 1.5f });
+        level3.AddCustomersToBarTap(4, new List<float>() { 0.5f, 1.25f, 1.5f });
 
         AllLevels.Add(level3);
     }

@@ -11,6 +11,21 @@ TextureImporter:
   - first:
       213: 21300004
     second: customer_man_0_0
+  - first:
+      213: 7130743558089245719
+    second: tapper_man_1
+  - first:
+      213: -657728703715945274
+    second: tapper_man_2
+  - first:
+      213: 3963723552656398788
+    second: tapper_man_3
+  - first:
+      213: 384761827295862951
+    second: tapper_man_4
+  - first:
+      213: 3179817970985492519
+    second: tapper_customers_0
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -115,7 +130,7 @@ TextureImporter:
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -133,10 +148,10 @@ TextureImporter:
         serializedVersion: 2
         x: 7
         y: 11
-        width: 80
-        height: 80
+        width: 79
+        height: 78
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -157,7 +172,7 @@ TextureImporter:
         width: 80
         height: 80
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -165,6 +180,111 @@ TextureImporter:
       bones: []
       spriteID: cd1b4c5c8783a814cb9fe7aa6f5e287c
       internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tapper_man_1
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 11
+        width: 79
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 714805c5c7d75f260800000000000000
+      internalID: 7130743558089245719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tapper_man_2
+      rect:
+        serializedVersion: 2
+        x: 94
+        y: 104
+        width: 79
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c4de609a374fd6f0800000000000000
+      internalID: -657728703715945274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tapper_man_3
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 104
+        width: 79
+        height: 80
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c91fe70299f10730800000000000000
+      internalID: 3963723552656398788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tapper_man_4
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 12
+        width: 80
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a0a917e7d2f65500800000000000000
+      internalID: 384761827295862951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tapper_customers_0
+      rect:
+        serializedVersion: 2
+        x: 266
+        y: 11
+        width: 79
+        height: 79
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7206ef2e89bf02c20800000000000000
+      internalID: 3179817970985492519
       vertices: []
       indices: 
       edges: []

@@ -47,6 +47,7 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -58,6 +59,7 @@ SpriteRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -122,6 +124,9 @@ MonoBehaviour:
   TapIndex: 0
   IsFlipped: 0
   CustomerLimit: 3
-  SpawnCoolDownTime: 3
+  SpawnCoolDownTime: 8.5
+  cooldownTimer: 0
   CustomerPrefab: {fileID: 1018221837947807538, guid: 308d9bd8a57eae1428b551a764a7befa,
     type: 3}
+  MinOffsetX: 0.25
+  MaxOffsetX: 1.2

@@ -58,8 +58,12 @@ public class GameManager : MonoBehaviour
     public bool HasLevelStarted;
     public bool Oops;
     public bool OopsC;
+
+    public bool NotDone = false;
     
     public bool IsGameWon;
+    public bool LevelWon;
+    
     public bool NewHighScoreP1;
     public bool NewHighScoreP2;
     public bool NewHighScoreP1N1;
@@ -134,6 +138,9 @@ public class GameManager : MonoBehaviour
     {
         CurrentPlayer = 1;
         
+        PlayerOneLives = 3;
+        PlayerTwoLives = 3;
+        
         if (instance == null) 
         {
             instance = this;
@@ -165,7 +172,10 @@ public class GameManager : MonoBehaviour
         {
             SelectedGameMode = GameMode.SinglePlayer;
         }
+        NotDone = false;
 
+        LevelWon = false;
+        
         Oops = false;
         OopsC = false;
         
@@ -178,9 +188,7 @@ public class GameManager : MonoBehaviour
         PlayerOneCurrentLevel = levelManager.level;
         PlayerTwoCurrentLevel = levelManager.level;
         levelUIManager.SetCurrentLevelText(PlayerOneCurrentLevel);
-
-        PlayerOneLives = 3;
-        PlayerTwoLives = 3;
+        
 
         levelManager.CurrentLevel = levelManager.AllLevels[levelManager.level - 1];
 
@@ -197,16 +205,19 @@ public class GameManager : MonoBehaviour
         {
             AddToPlayerTwoScore(toAdd);
         }
-        if (HappyCustomer >= 20)
+        if (HappyCustomer >= 20 && !LevelWon)
         {
+            LevelWon = true;
             levelManager.level++;
+            AddToCurrentPlayerScore(ScoreKey.LevelFinish);
             StartCoroutine("NextLevel");
         }
     }
 
     IEnumerator NextLevel ()
     {
-        Player = GameObject.Find("Player");  
+        Player = GameObject.Find("Player");
+        Player.GetComponent<Player>().Win.Play();
         if (levelManager.level <= 3)
         {
             Player.GetComponent<Animator>().SetBool("hasWon", true);
@@ -311,6 +322,7 @@ public class GameManager : MonoBehaviour
         {
             if (PlayerTwoLives != 0)
             {
+                HappyCustomer = 0;
                 CurrentPlayer = 2;
                 levelManager.CurrentLevel = levelManager.AllLevels[PlayerTwoCurrentLevel - 1];   
                 RestartLevelScene();
@@ -325,6 +337,7 @@ public class GameManager : MonoBehaviour
         {
             if (PlayerOneLives != 0)
             {
+                HappyCustomer = 0;
                 CurrentPlayer = 1;
                 levelManager.CurrentLevel = levelManager.AllLevels[PlayerOneCurrentLevel - 1];   
                 RestartLevelScene();
@@ -341,8 +354,8 @@ public class GameManager : MonoBehaviour
     {
         Oops = false;
         OopsC = false;
+        NotDone = false;
         
-        HappyCustomer = 0;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     
@@ -509,7 +522,6 @@ public class GameManager : MonoBehaviour
     {
         if (NewHighScoreP1 == true)
         {
-            P1.gameObject.SetActive(false);
             NewHighScoreP2 = false;
             NewHighScoreP1N1 = false;
             NewHighScoreP1N2 = false;
@@ -517,7 +529,6 @@ public class GameManager : MonoBehaviour
         }
         if (NewHighScoreP2 == true)
         {
-            P2.gameObject.SetActive(false);
             NewHighScoreP2 = false;
             NewHighScoreP2N1 = false;
             NewHighScoreP2N2 = false;
@@ -534,29 +545,50 @@ public class GameManager : MonoBehaviour
         if (NewHighScoreP1N1 == true)
         {
             PlayerPrefs.SetString("Nr1", P1.text);
+            P1.gameObject.SetActive(false);
+            IsDone();
         }
         else if (NewHighScoreP1N2 == true)
         {
             PlayerPrefs.SetString("Nr2", P1.text);
+            P1.gameObject.SetActive(false);
+            IsDone();
         }
         else if (NewHighScoreP1N3 == true)
         {
             PlayerPrefs.SetString("Nr3", P1.text);
+            P1.gameObject.SetActive(false);
+            IsDone();
         }
         if (NewHighScoreP2N1 == true)
         {
             PlayerPrefs.SetString("Nr1", P2.text);
+            P2.gameObject.SetActive(false);
+            IsDone();
         }
         else if (NewHighScoreP2N2 == true)
         {
             PlayerPrefs.SetString("Nr2", P2.text);
+            P2.gameObject.SetActive(false);
+            IsDone();
         }
         else if (NewHighScoreP2N3 == true)
         {
             PlayerPrefs.SetString("Nr3", P2.text);
+            P2.gameObject.SetActive(false);
+            IsDone();
+
         }
     }
 
+    private void IsDone()
+    {
+        if (P1.IsActive() == false && P2.IsActive() == false)
+        {
+            Back2MainMenu();
+        }
+    }
+    
     public void DeletePlayerPrefsKeys()
     {
         PlayerPrefs.DeleteAll();   

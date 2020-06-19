@@ -12,11 +12,13 @@
           <e p="Beer.cs" t="Include" />
           <e p="Customer.cs" t="Include" />
           <e p="DDestroy.cs" t="Include" />
+          <e p="GameInputManager.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="LevelManager.cs" t="Include" />
           <e p="LevelUIManager.cs" t="Include" />
           <e p="Loader.cs" t="Include" />
           <e p="MainMenu.cs" t="Include" />
+          <e p="Mixer.cs" t="Include" />
           <e p="Player.cs" t="Include" />
         </e>
       </e>

@@ -54,7 +54,6 @@ public class Player : MonoBehaviour
     private bool pourPressed;
     private bool servePressed;
 
-
     // Start is called before the first frame update
     public void Start()
     {
@@ -95,9 +94,9 @@ public class Player : MonoBehaviour
 
             horizontalInput = (int)Input.GetAxisRaw("Horizontal");
             verticalInput = (int)Input.GetAxisRaw("Vertical");
-
-            pourPressed = Input.GetButtonDown("Pour");
-            servePressed = Input.GetButtonDown("Serve");
+            
+            pourPressed = GameInputManager.GetKeyDown("Pour");
+            servePressed = GameInputManager.GetKeyDown("Serve");
 
             StopFillingBeerIfMoving(horizontalInput, verticalInput);
         

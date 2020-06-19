@@ -1410,6 +1410,17 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1680428593}
+    - target: {fileID: 2001064447148145647, guid: b17b68ef6981c0b4cb5633ccb71f1846,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ef10cfe8682c291438e6e9867a72fce2,
+        type: 3}
+    - target: {fileID: 2001064447148145647, guid: b17b68ef6981c0b4cb5633ccb71f1846,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2674854396946105847, guid: b17b68ef6981c0b4cb5633ccb71f1846,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1519,6 +1530,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LevelCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273723569045759474, guid: b17b68ef6981c0b4cb5633ccb71f1846,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b17b68ef6981c0b4cb5633ccb71f1846, type: 3}
@@ -1824,17 +1840,17 @@ PrefabInstance:
     - target: {fileID: 1544682018121916316, guid: e47ba585a6e8b4c40b4e4fd1caf532ee,
         type: 3}
       propertyPath: m_BackGroundColor.r
-      value: 0.93725497
+      value: 0.48235297
       objectReference: {fileID: 0}
     - target: {fileID: 1544682018121916316, guid: e47ba585a6e8b4c40b4e4fd1caf532ee,
         type: 3}
       propertyPath: m_BackGroundColor.g
-      value: 0.10980393
+      value: 0.4901961
       objectReference: {fileID: 0}
     - target: {fileID: 1544682018121916316, guid: e47ba585a6e8b4c40b4e4fd1caf532ee,
         type: 3}
       propertyPath: m_BackGroundColor.b
-      value: 0.14509805
+      value: 0.48235297
       objectReference: {fileID: 0}
     - target: {fileID: 1544682018121916316, guid: e47ba585a6e8b4c40b4e4fd1caf532ee,
         type: 3}
@@ -2182,6 +2198,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Level1Background
       objectReference: {fileID: 0}
+    - target: {fileID: 833537163028191063, guid: 8dffdf9ba9e86cc489b2ca1055193d36,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 36aa72f05df57f34089cd1b3b5792e40,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8dffdf9ba9e86cc489b2ca1055193d36, type: 3}
 --- !u!1001 &2111848322

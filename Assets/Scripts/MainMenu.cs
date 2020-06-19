@@ -7,16 +7,21 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     private AudioSource Tip;
+    
     private Animator animator;
+    
     private float Samples = 60f;
     private float BeforeShow = 22f;
     private float AfterShow = 39f;
     private float Speed = 0.05f;
     private float ShowAfter = 0f;
     private float RemoveAfter = 0f;
+
+    private bool NoMenu = true;
     private bool HasntPressed = true;
     void Start()
     {
+        GameManager.instance.MenuRef.gameObject.SetActive(true);
         ShowAfter = BeforeShow / Speed / Samples;
         RemoveAfter = AfterShow / Speed / Samples;
         Tip = GameObject.Find("IntroBackground").GetComponent<AudioSource>();
@@ -31,17 +36,29 @@ public class MainMenu : MonoBehaviour
         bool player1Pressed = Input.GetButtonUp("Player1Start");
         bool player2Pressed = Input.GetButtonUp("Player2Start");
 
-        if (player1Pressed && HasntPressed)
+        if (player1Pressed && HasntPressed && NoMenu)
         {
             HasntPressed = false;
             Tip.Play();
             Invoke("PlayGame1P", 1);
         }
-        else if (player2Pressed && HasntPressed)
+        else if (player2Pressed && HasntPressed && NoMenu)
         {
             HasntPressed = false;
             Tip.Play();
             Invoke("PlayGame2P", 1);
+        }
+        
+        if ((Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.H)) && NoMenu)
+        {
+            NoMenu = false;
+            OpenMenu();
+        }
+
+        else if ((Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.H)) && !NoMenu)
+        {
+            NoMenu = true;
+            CloseMenu();
         }
     }
 
@@ -49,6 +66,7 @@ public class MainMenu : MonoBehaviour
     {
         Tip.Stop();
         GameManager.instance.SetHighScoreInactive();
+        GameManager.instance.MenuRef.gameObject.SetActive(false);
         GameManager.instance.StartGame(isTwoPlayer: false); 
     }
     
@@ -56,6 +74,7 @@ public class MainMenu : MonoBehaviour
     {
         Tip.Stop();
         GameManager.instance.SetHighScoreInactive();
+        GameManager.instance.MenuRef.gameObject.SetActive(false);
         GameManager.instance.StartGame(isTwoPlayer: true); 
     }
     
@@ -66,5 +85,17 @@ public class MainMenu : MonoBehaviour
         yield return new WaitForSeconds(RemoveAfter);
         GameManager.instance.SetHighScoreInactive();
         StartCoroutine(Loopscore());
+    }
+
+    private void OpenMenu()
+    {
+        GameManager.instance.MenuRef.gameObject.SetActive(false);
+        GameManager.instance.Menu.gameObject.SetActive(true);
+    }
+    
+    private void CloseMenu()
+    {
+        GameManager.instance.Menu.gameObject.SetActive(false);
+        GameManager.instance.MenuRef.gameObject.SetActive(true);
     }
 }

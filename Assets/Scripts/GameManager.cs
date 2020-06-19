@@ -80,6 +80,8 @@ public class GameManager : MonoBehaviour
     public int PlayerOneLives;
 
     private GameObject Player;
+    
+    public GameObject Menu;
 
     public Text HighScore1;
     public Text HighScore2;
@@ -90,14 +92,26 @@ public class GameManager : MonoBehaviour
 
     public Text Game;
 
+    public Text DefaultServeBind;
+
+    public Text DefaultPourBind;
+
+    public Text MenuRef;
+    
     public Image BG;
 
     public InputField P1;
     public InputField P2;
     
+    public InputField Serve;
+    public InputField Pour;
+    
     public int PlayerTwoScore;
     public int PlayerTwoCurrentLevel;
     public int PlayerTwoLives;
+    
+    public KeyCode KCP;
+    public KeyCode KCS;
     void OnEnable()
     {
         //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
@@ -153,6 +167,8 @@ public class GameManager : MonoBehaviour
         levelManager = GetComponent<LevelManager>();
         levelUIManager = GetComponent<LevelUIManager>();
 
+        GetBinds();
+        
         DontDestroyOnLoad(gameObject);
     }
 
@@ -189,7 +205,6 @@ public class GameManager : MonoBehaviour
         PlayerTwoCurrentLevel = levelManager.level;
         levelUIManager.SetCurrentLevelText(PlayerOneCurrentLevel);
         
-
         levelManager.CurrentLevel = levelManager.AllLevels[levelManager.level - 1];
 
         SceneManager.LoadScene("Level" + levelManager.level);
@@ -585,8 +600,42 @@ public class GameManager : MonoBehaviour
     {
         if (P1.IsActive() == false && P2.IsActive() == false)
         {
+            PlayerOneLives = 3;
+            PlayerTwoLives = 3;
+            PlayerOneCurrentLevel = 1;
+            PlayerTwoCurrentLevel = 1;
+            PlayerOneScore = 0;
+            PlayerTwoScore = 0;
+            levelManager.level = 1;
             Back2MainMenu();
         }
+    }
+
+    public void ChangeBindPour()
+    {
+        PlayerPrefs.SetString("Pour", Pour.text.ToUpper());
+        DefaultPourBind.text = PlayerPrefs.GetString("Pour", "X");
+        KCP = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Pour", "X"));
+        GameInputManager.SetKeyMap("Pour", KCP);
+    }
+    
+    public void ChangeBindServe()
+    {
+        PlayerPrefs.SetString("Serve", Serve.text.ToUpper());
+        DefaultServeBind.text = PlayerPrefs.GetString("Serve", "Z");
+        KCS = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Serve", "Z"));
+        GameInputManager.SetKeyMap("Serve", KCS);
+    }
+
+    public void GetBinds()
+    {
+        DefaultPourBind.text = PlayerPrefs.GetString("Pour", "X");
+        KCP = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Pour", "X"));
+        GameInputManager.SetKeyMap("Pour", KCP);
+        
+        DefaultServeBind.text = PlayerPrefs.GetString("Serve", "Z");
+        KCS = (KeyCode)System.Enum.Parse(typeof(KeyCode), PlayerPrefs.GetString("Serve", "Z"));
+        GameInputManager.SetKeyMap("Serve", KCS);
     }
     
     public void DeletePlayerPrefsKeys()

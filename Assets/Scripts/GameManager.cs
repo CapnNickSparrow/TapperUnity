@@ -41,11 +41,11 @@ public class GameManager : MonoBehaviour
             {
                 _scoreTable = new Dictionary<ScoreKey, int>();
                 _scoreTable.Add(ScoreKey.EmptyMug, 100);
-                _scoreTable.Add(ScoreKey.Tip, 1500);
+                _scoreTable.Add(ScoreKey.Tip, 250);
                 _scoreTable.Add(ScoreKey.Customer, 50);
                 _scoreTable.Add(ScoreKey.HardCustomer, 75);
                 _scoreTable.Add(ScoreKey.HarderCustomer, 100);
-                _scoreTable.Add(ScoreKey.LevelFinish, 1000);
+                _scoreTable.Add(ScoreKey.LevelFinish, 250);
             }
 
             return _scoreTable;
@@ -63,6 +63,8 @@ public class GameManager : MonoBehaviour
     
     public bool IsGameWon;
     public bool LevelWon;
+
+    public bool TwoPlayer;
     
     public bool NewHighScoreP1;
     public bool NewHighScoreP2;
@@ -82,6 +84,8 @@ public class GameManager : MonoBehaviour
     private GameObject Player;
     
     public GameObject Menu;
+    
+    public GameObject ScorePal;
 
     public Text HighScore1;
     public Text HighScore2;

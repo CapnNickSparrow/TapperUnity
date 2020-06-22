@@ -5,10 +5,10 @@ using UnityEngine;
 public class Customer : MonoBehaviour
 {
     private AudioSource Drink;
-    
+
     public GameObject BeerPrefab;
     public int TapIndex;
-
+    
     public int HorionztalDir = 1;
 
     public float MoveSpeed = 2.0f;
@@ -24,12 +24,11 @@ public class Customer : MonoBehaviour
     public bool IsSliding;
     public bool IsDistracted;
     public bool IsDrinking;
+    public bool HasDrunk = false;
+    
     public bool CanDrink
     {
-        get
-        {
-            return !IsSliding && !IsDrinking && !IsDistracted;
-        }
+        get { return !IsSliding && !IsDrinking && !IsDistracted; }
     }
 
     private BoxCollider2D boxCollider;
@@ -40,7 +39,7 @@ public class Customer : MonoBehaviour
     private GameObject Player;
 
     private int Char;
-    
+
     private float currentMoveTime;
     public float RandomMoveTime;
 
@@ -53,11 +52,12 @@ public class Customer : MonoBehaviour
     public float MaxStopTime = 2.5f;
     private bool ReturnBeerOnNextUpdate = false;
 
+    public GameObject Tip;
 
     // Start is called before the first frame update
     void Start()
     {
-        Player = GameObject.Find("Player"); 
+        Player = GameObject.Find("Player");
         IsDistracted = false;
         IsDrinking = false;
         IsSliding = false;
@@ -76,29 +76,32 @@ public class Customer : MonoBehaviour
         animator.SetInteger("Idle", Char);
 
         Drink = GetComponent<AudioSource>();
-        
+
         spriteRenderer.flipX = (HorionztalDir == -1);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (ReturnBeerOnNextUpdate && !GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
+        if (ReturnBeerOnNextUpdate && !GameManager.instance.Oops &&
+            Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             StartCoroutine(SpawnEmptyBeerMug());
             ReturnBeerOnNextUpdate = false;
             return;
         }
 
-        if (RandomMoveTime == 0 && !GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
+        if (RandomMoveTime == 0 && !GameManager.instance.Oops &&
+            Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
             RandomMoveTime = Random.Range(MinMoveTime, MaxMoveTime);
         }
 
         MoveForward();
-        
-        if (currentMoveTime >= RandomMoveTime && !GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
-        {            
+
+        if (currentMoveTime >= RandomMoveTime && !GameManager.instance.Oops &&
+            Player.GetComponent<Animator>().GetBool("hasWon") == false)
+        {
             StartCoroutine(DelayMovement());
         }
     }
@@ -137,7 +140,7 @@ public class Customer : MonoBehaviour
             Vector3 newPos = Vector3.MoveTowards(rBody.position, end, MoveSpeed * Time.deltaTime);
             rBody.MovePosition(newPos);
 
-            currentMoveTime += Time.deltaTime;   
+            currentMoveTime += Time.deltaTime;
         }
     }
 
@@ -187,7 +190,7 @@ public class Customer : MonoBehaviour
     {
         IsDrinking = true;
         animator.SetBool("isDrinking", IsDrinking);
-        
+
         float randomDrinkTime = Random.Range(MinDrinkTime, MaxDrinkTime);
         yield return new WaitForSeconds(randomDrinkTime);
 
@@ -210,50 +213,60 @@ public class Customer : MonoBehaviour
             float beerOffsetX = 0.25f;
             float beerOffsetY = -0.35f;
 
-            GameObject beerObj = Instantiate(BeerPrefab, transform.position + new Vector3(beerOffsetX * HorionztalDir, beerOffsetY, 0), transform.rotation);
+            GameObject beerObj = Instantiate(BeerPrefab,
+                transform.position + new Vector3(beerOffsetX * HorionztalDir, beerOffsetY, 0), transform.rotation);
             Beer beer = beerObj.GetComponent<Beer>();
             beer.HorionztalDir = HorionztalDir;
             beer.IsFilled = false;
             beer.Speed = GameManager.instance.levelManager.GetPlayerBeerSpeed() * 0.5f;
-            beer.TapIndex = this.TapIndex;   
+            beer.TapIndex = this.TapIndex;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        
+
         if (collider.gameObject.CompareTag("Beer") && CanDrink && !GameManager.instance.NotDone)
         {
             Beer beer = collider.GetComponent<Beer>();
-            if (beer.IsFilled) 
+            if (beer.IsFilled)
             {
+                HasDrunk = true;
                 Drink.Play();
                 Destroy(beer.gameObject);
                 StartSliding();
+                int Chances = Random.Range(0, 11);
+                if (Chances > 9)
+                {
+                    Instantiate(Tip, transform.position + new Vector3(0, -0.5f, 0), Quaternion.identity);
+                }
             }
         }
-
-        if (collider.gameObject.CompareTag("Exit") && (IsDrinking || IsSliding))
+        
+        if (collider.gameObject.CompareTag("Exit") && HasDrunk)
         {
             if (Char >= 0 && Char < 3)
             {
-                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.Customer);    
+                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.Customer);
             }
+
             if (Char >= 3 && Char < 6)
             {
-                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.HardCustomer);    
+                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.HardCustomer);
             }
+
             if (Char == 6)
             {
-                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.HarderCustomer);    
+                GameManager.instance.AddToCurrentPlayerScore(ScoreKey.HarderCustomer);
             }
+
             GameManager.instance.HappyCustomer++;
             Destroy(this.gameObject);
         }
 
-        if (collider.gameObject.CompareTag("BarEnd") && !IsDrinking)
+        if (collider.gameObject.CompareTag("BarEnd") && !IsDrinking) 
         {
-            GameManager.instance.levelManager.PlayerMissedCustomer = true;
+                GameManager.instance.levelManager.PlayerMissedCustomer = true;
         }
     }
 }

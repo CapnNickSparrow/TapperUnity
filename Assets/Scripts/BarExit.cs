@@ -15,51 +15,57 @@ public class BarExit : MonoBehaviour
     [SerializeField]
     private float cooldownTimer;
 
+    // Connects to certain GameObjects
     public GameObject CustomerPrefab;
     private GameObject Player;
-    
-    public float MinOffsetX = 0.25f;
-    public float MaxOffsetX = 1.2f;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        if (GameManager.instance.levelManager.level == 1)
+        // Checks the current level to set the proper Spawn Cool Down Timer
+        if (GameManager.instance.levelManager.level == Constants.LVL_1)
         {
-            SpawnCoolDownTime = 7.8f;
+            SpawnCoolDownTime = Constants.SPAWN_COOLDOWN_TIMER_LVL1;
         }
-        else if (GameManager.instance.levelManager.level == 2)
+        else if (GameManager.instance.levelManager.level == Constants.LVL_2)
         {
-            SpawnCoolDownTime = 6.6f;
+            SpawnCoolDownTime = Constants.SPAWN_COOLDOWN_TIMER_LVL2;
         }
-        else if (GameManager.instance.levelManager.level == 3)
+        else if (GameManager.instance.levelManager.level == Constants.LVL_3)
         {
-            SpawnCoolDownTime = 5.8f;
+            SpawnCoolDownTime = Constants.SPAWN_COOLDOWN_TIMER_LVL3;
         }
+        
+        // Checks what the player is en renders the bar Sprite
         Player = GameObject.Find("Player");  
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         IsFlipped = renderer.flipX;   
         
+        // Cooltime starts at 0 so the customers can begin to spawn
         cooldownTimer = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Checks if we are below the max amount of customers we can have and if the Cooldown is 0 again and if the player hasn't made a mistake or is busy with a animation
         if (GetCustomerCount() < CustomerLimit && cooldownTimer >= SpawnCoolDownTime && GameManager.instance.HasLevelStarted && !GameManager.instance.Oops && Player.GetComponent<Animator>().GetBool("hasWon") == false)
         {
+            // Spawns another customer and set the timer to 0 again
             SpawnCustomer();
             cooldownTimer = 0;
         }
         else
         {
+            // Count up time
             cooldownTimer += Time.deltaTime;
         }
     }
 
     int GetCustomerCount()
     {
+        // Standard is and for each customer with the tag "Customer" it will count 1+ and will return a value
         int customerCount = 0;
         GameObject[] customers = GameObject.FindGameObjectsWithTag("Customer");
 
@@ -75,15 +81,18 @@ public class BarExit : MonoBehaviour
         return customerCount;
     }
 
+    // Spawns Customer
     void SpawnCustomer()
     {
         int customerDir = IsFlipped ? -1 : 1;
 
-        float customerOffsetX = Random.Range(MinOffsetX, MaxOffsetX);
-        float customerOffsetY = 0.75f;
+        float customerOffsetX = Random.Range(Constants.MIN_OFFSET_X, Constants.MAX_OFFSET_X);
 
-        GameObject customerObj = Instantiate(CustomerPrefab, transform.position + new Vector3(customerDir * customerOffsetX, customerOffsetY, 0), transform.rotation);
+        // Spawns the GameObject
+        GameObject customerObj = Instantiate(CustomerPrefab, transform.position + new Vector3(customerDir * customerOffsetX, Constants.CUSTOMER_OFFSET_Y, 0), transform.rotation);
         
+        
+        // Sets the values for the customer
         Customer customer = customerObj.GetComponent<Customer>();
         customer.MoveSpeed = GameManager.instance.levelManager.GetCustomerMoveSpeed();
         customer.SlideSpeed = GameManager.instance.levelManager.GetCustomerSlideSpeed();

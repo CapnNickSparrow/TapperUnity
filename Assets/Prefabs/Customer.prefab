@@ -183,6 +183,7 @@ MonoBehaviour:
   MaxMoveTime: 3
   MinStopTime: 0.5
   MaxStopTime: 2.5
+  Tip: {fileID: 3067634974581825608, guid: 1db1298b387d75b408b89e2aaa5df7e8, type: 3}
 --- !u!82 &7154553840428404356
 AudioSource:
   m_ObjectHideFlags: 0
@@ -192,7 +193,8 @@ AudioSource:
   m_GameObject: {fileID: 1018221837947807538}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 9586b62514ccead40aa782c53cfc61ed,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 07daf2c169f918849ae6b875de19a948, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1

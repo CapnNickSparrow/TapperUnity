@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
     public AudioSource Lose;
     public AudioSource Up;
     public AudioSource Throw;
+    public AudioSource NewLife;
     
     public float FillOffset
     {
@@ -57,6 +58,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        NewLife.Play();
         boxCollider = GetComponent<BoxCollider2D>();
         rBody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();    
@@ -496,6 +498,13 @@ public class Player : MonoBehaviour
                 Destroy(beer.gameObject);
                 GameManager.instance.AddToCurrentPlayerScore(ScoreKey.EmptyMug);                
             }
+        }
+        
+        if (collider.gameObject.CompareTag("Tip"))
+        {
+            Tip tip = collider.gameObject.GetComponent<Tip>();
+            GameManager.instance.AddToCurrentPlayerScore(ScoreKey.Tip);
+            Destroy(tip.gameObject);
         }
     }
 

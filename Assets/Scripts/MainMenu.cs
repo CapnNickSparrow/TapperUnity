@@ -67,7 +67,8 @@ public class MainMenu : MonoBehaviour
         Tip.Stop();
         GameManager.instance.SetHighScoreInactive();
         GameManager.instance.MenuRef.gameObject.SetActive(false);
-        GameManager.instance.StartGame(isTwoPlayer: false); 
+        GameManager.instance.TwoPlayer = false;
+        SceneManager.LoadScene("ScorePal");
     }
     
     private void PlayGame2P()
@@ -75,7 +76,8 @@ public class MainMenu : MonoBehaviour
         Tip.Stop();
         GameManager.instance.SetHighScoreInactive();
         GameManager.instance.MenuRef.gameObject.SetActive(false);
-        GameManager.instance.StartGame(isTwoPlayer: true); 
+        GameManager.instance.TwoPlayer = true;
+        SceneManager.LoadScene("ScorePal");
     }
     
     IEnumerator Loopscore()

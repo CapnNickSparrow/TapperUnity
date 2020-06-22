@@ -81,6 +81,7 @@ public class Beer : MonoBehaviour
         if (collider.gameObject.CompareTag("Exit") && IsFilled)
         {
             GameManager.instance.NotDone = true;
+            GameManager.instance.Oops = true;
             Break.Play();
             StartCoroutine(ShatterBeer());
         }
@@ -95,6 +96,7 @@ public class Beer : MonoBehaviour
             else
             {
                 GameManager.instance.NotDone = true;
+                GameManager.instance.Oops = true;
                 StartCoroutine(DropBeerFromBar());
             }
         }

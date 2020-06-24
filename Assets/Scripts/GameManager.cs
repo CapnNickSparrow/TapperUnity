@@ -27,10 +27,14 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
 
+    // Connects to multiple assets
+    private GameObject Player;
+    
     public LevelManager levelManager;
 
     public LevelUIManager levelUIManager;
 
+    // The Score Palette
     private Dictionary<ScoreKey, int> _scoreTable;
 
     public Dictionary<ScoreKey, int> ScoreTable
@@ -40,26 +44,40 @@ public class GameManager : MonoBehaviour
             if (_scoreTable == null)
             {
                 _scoreTable = new Dictionary<ScoreKey, int>();
-                _scoreTable.Add(ScoreKey.EmptyMug, 100);
-                _scoreTable.Add(ScoreKey.Tip, 250);
-                _scoreTable.Add(ScoreKey.Customer, 50);
-                _scoreTable.Add(ScoreKey.HardCustomer, 75);
-                _scoreTable.Add(ScoreKey.HarderCustomer, 100);
-                _scoreTable.Add(ScoreKey.LevelFinish, 250);
+                _scoreTable.Add(ScoreKey.EmptyMug, Constants.MUG_HARD);
+                _scoreTable.Add(ScoreKey.Tip, Constants.TIP_FINISH);
+                _scoreTable.Add(ScoreKey.Customer, Constants.STANDARD);
+                _scoreTable.Add(ScoreKey.HardCustomer, Constants.UNCOMMON);
+                _scoreTable.Add(ScoreKey.HarderCustomer, Constants.MUG_HARD);
+                _scoreTable.Add(ScoreKey.LevelFinish, Constants.TIP_FINISH);
             }
 
             return _scoreTable;
         }
     }
+    
+    // Game Mode
+    public GameMode SelectedGameMode;
+    
+    // Ints
+    public int CurrentPlayer = Constants.PLAYER_ONE;
+
+    public int PlayerTwoScore;
+    public int PlayerTwoCurrentLevel;
+    public int PlayerTwoLives;
+    
+    public int PlayerOneScore;
+    public int PlayerOneCurrentLevel;
+    public int PlayerOneLives;
+    
     public int HappyCustomer;
 
-    public GameMode SelectedGameMode;
-
+    // Bools
     public bool HasLevelStarted;
+    
     public bool Oops;
     public bool OopsC;
-
-    public bool NotDone = false;
+    public bool NotDone;
     
     public bool IsGameWon;
     public bool LevelWon;
@@ -74,19 +92,12 @@ public class GameManager : MonoBehaviour
     public bool NewHighScoreP2N1;
     public bool NewHighScoreP2N2;
     public bool NewHighScoreP2N3;
-    
-    public int CurrentPlayer = 1;
 
-    public int PlayerOneScore;
-    public int PlayerOneCurrentLevel;
-    public int PlayerOneLives;
-
-    private GameObject Player;
-    
+    // Canvas Objects
     public GameObject Menu;
     
     public GameObject ScorePal;
-
+    
     public Text HighScore1;
     public Text HighScore2;
     public Text HighScore3;
@@ -110,21 +121,19 @@ public class GameManager : MonoBehaviour
     public InputField Serve;
     public InputField Pour;
     
-    public int PlayerTwoScore;
-    public int PlayerTwoCurrentLevel;
-    public int PlayerTwoLives;
-    
+    // KeyCodes    
     public KeyCode KCP;
     public KeyCode KCS;
+    
     void OnEnable()
     {
-        //Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
+        // Tell our 'OnLevelFinishedLoading' function to start listening for a scene change as soon as this script is enabled.
         SceneManager.sceneLoaded += OnLevelFinishedLoading;
     }
 
     void OnDisable()
     {
-        //Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled.
+        // Tell our 'OnLevelFinishedLoading' function to stop listening for a scene change as soon as this script is disabled.
         SceneManager.sceneLoaded -= OnLevelFinishedLoading;
     }
 
@@ -141,9 +150,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // After 2.5 Seconds start the level and  set the Get Ready To Serve screen on inactive
     protected IEnumerator HideReadyToServeImageAndStartLevel()
     {
-        float displayTime = 2.5f;
+        float displayTime = Constants.DISPLAY_TIME;
 
         yield return new WaitForSeconds(displayTime);
 
@@ -154,36 +164,39 @@ public class GameManager : MonoBehaviour
     // Awake is called before the first frame update
     void Awake()
     {
-        CurrentPlayer = 1;
+        // Sets Standard Current Player and set the lives of each player    
+        CurrentPlayer = Constants.PLAYER_ONE;
         
-        PlayerOneLives = 3;
-        PlayerTwoLives = 3;
+        PlayerOneLives = Constants.STANDARD_LIVES;
+        PlayerTwoLives = Constants.STANDARD_LIVES;
         
+        // GameManager is the instance
         if (instance == null) 
         {
             instance = this;
         } 
+        
+        // If something else is the instance destroy it
         else if (instance != this) 
         {
             Destroy(gameObject);
         }
 
+        // Gets the LevelManagement Components
         levelManager = GetComponent<LevelManager>();
         levelUIManager = GetComponent<LevelUIManager>();
 
+        // Gets the last saved KeyBindings
         GetBinds();
         
+        // Let's the GameManager not kill itself after switching scenes
         DontDestroyOnLoad(gameObject);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
+    // Starts the game with the following attributes
     public void StartGame(bool isTwoPlayer)
     {
+        // If the game has a true Two Player bool make the SelectedGameMode Two Player otherwise make it One Player
         if (isTwoPlayer)
         {
             SelectedGameMode = GameMode.TwoPlayer;
@@ -192,6 +205,9 @@ public class GameManager : MonoBehaviour
         {
             SelectedGameMode = GameMode.SinglePlayer;
         }
+        
+        // Sets the made a mistake or won variables on false to prevent problems
+
         NotDone = false;
 
         LevelWon = false;
@@ -199,32 +215,43 @@ public class GameManager : MonoBehaviour
         Oops = false;
         OopsC = false;
         
-        HappyCustomer = 0;
+        // Set the current HappyCustomer to 0 every time a new level begins
+        HappyCustomer = Constants.ZERO;
 
+        // Displays the current score of the players
         levelUIManager.SetPlayerOneScoreText(PlayerOneScore);
         
         levelUIManager.SetPlayerTwoScoreText(PlayerTwoScore);
 
+        // Sets the Players Current level equal to that of the level they are in
         PlayerOneCurrentLevel = levelManager.level;
         PlayerTwoCurrentLevel = levelManager.level;
+        
+        // Sets the Levelicon equal to the level the first player is in
         levelUIManager.SetCurrentLevelText(PlayerOneCurrentLevel);
         
-        levelManager.CurrentLevel = levelManager.AllLevels[levelManager.level - 1];
+        levelManager.CurrentLevel = levelManager.AllLevels[levelManager.level - Constants.ONE];
 
+        // Loads the Level scene with the current number so the levelloader matches
         SceneManager.LoadScene("Level" + levelManager.level);
     }
 
+    // Called from another place, this will add score based on the Palette to the correct player
     internal void AddToCurrentPlayerScore(ScoreKey toAdd)
     {
-        if (CurrentPlayer == 1)
+        // Checks which player is playing to add score to
+        if (CurrentPlayer == Constants.PLAYER_ONE)
         {
             AddToPlayerOneScore(toAdd);
         }
-        else if (CurrentPlayer == 2)
+        else
         {
             AddToPlayerTwoScore(toAdd);
         }
-        if (HappyCustomer >= 20 && !LevelWon)
+        
+        // If you have served 20 customers but the level hasn't been won yet
+        // Set the level to won and set the level to the next level, add level finish bonus and start the next level
+        if (HappyCustomer >= Constants.PROMOTION && !LevelWon)
         {
             LevelWon = true;
             levelManager.level++;
@@ -233,42 +260,53 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Wil prepare for the next level
     IEnumerator NextLevel ()
     {
+        // Find the player and let him do the win track
         Player = GameObject.Find("Player");
         Player.GetComponent<Player>().Win.Play();
-        if (levelManager.level <= 3)
+        
+        // Checks if the player isn't at the final level
+        if (levelManager.level <= Constants.LVL_3)
         {
+            // Let the player does his win animation
             Player.GetComponent<Animator>().SetBool("hasWon", true);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(Constants.WAIT_2_SEC);
             Player.GetComponent<Animator>().SetBool("hasWon", false);
+            
+            // If the game mode is two player start new game with two player otherwise with one player
             if (SelectedGameMode == GameMode.TwoPlayer)
             {
                 StartGame(isTwoPlayer: true);    
             }
-                
-            else if (GameManager.instance.SelectedGameMode != GameMode.TwoPlayer)
+            else
             {
                 StartGame(isTwoPlayer: false);    
             }
         }
+        // If it is the final level
         else
         {
+            // Set the GameWon bool to true
             IsGameWon = true;
-            if (CurrentPlayer == 1 && PlayerTwoLives != 0 && SelectedGameMode == GameMode.TwoPlayer)
+            // If the current plaer is one and the second player has lives left and the GameMode is Two Player use the win animation and switch players
+            if (CurrentPlayer == Constants.PLAYER_ONE && PlayerTwoLives != Constants.ZERO && SelectedGameMode == GameMode.TwoPlayer)
             {
                 Player.GetComponent<Animator>().SetBool("hasWon", true);
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(Constants.WAIT_2_SEC);
                 Player.GetComponent<Animator>().SetBool("hasWon", false);
                 SwitchPlayers();
             }
-            else if (CurrentPlayer == 2 && PlayerOneLives != 0 && SelectedGameMode == GameMode.TwoPlayer)
+            // If the current player is two and the first player has lives left and the GameMode is Two Player use the win animation and switch players
+            else if (CurrentPlayer == Constants.PLAYER_TWO && PlayerOneLives != Constants.ZERO && SelectedGameMode == GameMode.TwoPlayer)
             {
                 Player.GetComponent<Animator>().SetBool("hasWon", true);
-                yield return new WaitForSeconds(2);
+                yield return new WaitForSeconds(Constants.WAIT_2_SEC);
                 Player.GetComponent<Animator>().SetBool("hasWon", false);
                 SwitchPlayers();
             }
+            // Go the the end screen
             else
             {
                 GameOver();
@@ -277,12 +315,14 @@ public class GameManager : MonoBehaviour
         yield return null;
     }
     
+    // Adds score to Player One according to the Score Palette
     internal void AddToPlayerOneScore(ScoreKey toAdd)
     {
         PlayerOneScore += ScoreTable[toAdd];
         levelUIManager.SetPlayerOneScoreText(PlayerOneScore);
     }
 
+    // Adds score to Player Two according to the Score Palette
     internal void AddToPlayerTwoScore(ScoreKey toAdd)
     {
         PlayerTwoScore += ScoreTable[toAdd];
@@ -290,14 +330,16 @@ public class GameManager : MonoBehaviour
     }
 
     
+    // Let's Player Lose
     public void PlayerLost()
     {
+        // Set's all mistakes to false
         levelManager.PlayerMissedCustomer = false;
         levelManager.PlayerMissedEmptyMug = false;
         levelManager.PlayerThrewExtraMug = false;
         
-        // Lose a life
-        if (CurrentPlayer == 1)
+        // Player on or Two, depends on the current Player Loses a life 
+        if (CurrentPlayer == Constants.PLAYER_ONE)
         {
             PlayerOneLives--;
             Debug.Log(string.Format("Player 1 Lives: {0}", PlayerOneLives));
@@ -309,10 +351,11 @@ public class GameManager : MonoBehaviour
             Debug.Log(string.Format("Player 2 Lives: {0}", PlayerTwoLives));
         }
 
-        // switch players if two player
+        // Switch Players if Two Player
         if (SelectedGameMode == GameMode.TwoPlayer)
         {
-            if ((CurrentPlayer == 1 && PlayerOneLives != 0) || (CurrentPlayer == 2 && PlayerOneLives != 0))
+            // If there is Health Left Switch Players, otherwise Game Over
+            if ((CurrentPlayer == Constants.PLAYER_ONE && PlayerOneLives != Constants.ZERO) || (CurrentPlayer == Constants.PLAYER_TWO && PlayerOneLives != Constants.ZERO))
             {
                 SwitchPlayers();
             }
@@ -321,9 +364,10 @@ public class GameManager : MonoBehaviour
                 GameOver();
             }
         }
+        // If the GameMode is Singleplayer check if the Player has Health left so the scene can be restarted otherwise Game Over 
         else
         {
-            if (PlayerOneLives == 0)
+            if (PlayerOneLives == Constants.ZERO)
             {
                 GameOver();
             }
@@ -335,40 +379,45 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Switches the Player if Possible
     private void SwitchPlayers()
     {
-        if (CurrentPlayer == 1)
+        // If Player is 1 and the 2nd Player has lives left, Switch Current Player and Restart the Scene, otherwise Current Player Stays 1 and restarts the scene
+        if (CurrentPlayer == Constants.PLAYER_ONE)
         {
-            if (PlayerTwoLives != 0)
+            if (PlayerTwoLives != Constants.ZERO)
             {
-                HappyCustomer = 0;
-                CurrentPlayer = 2;
-                levelManager.CurrentLevel = levelManager.AllLevels[PlayerTwoCurrentLevel - 1];   
+                HappyCustomer = Constants.ZERO;
+                CurrentPlayer = Constants.PLAYER_TWO;
+                levelManager.CurrentLevel = levelManager.AllLevels[PlayerTwoCurrentLevel - Constants.ONE];   
                 RestartLevelScene();
             }
             else
             {
-                CurrentPlayer = 1;  
+                CurrentPlayer = Constants.PLAYER_ONE;  
                 RestartLevelScene();
             }
         }
-        else if (CurrentPlayer == 2)
+        
+        // If Player is 2 and the 1st Player has lives left, Switch Current Player and Restart the Scene, otherwise Current Player Stays 2 and restarts the scene
+        else if (CurrentPlayer == Constants.PLAYER_TWO)
         {
-            if (PlayerOneLives != 0)
+            if (PlayerOneLives != Constants.ZERO)
             {
-                HappyCustomer = 0;
-                CurrentPlayer = 1;
-                levelManager.CurrentLevel = levelManager.AllLevels[PlayerOneCurrentLevel - 1];   
+                HappyCustomer = Constants.ZERO;
+                CurrentPlayer = Constants.PLAYER_ONE;
+                levelManager.CurrentLevel = levelManager.AllLevels[PlayerOneCurrentLevel - Constants.ONE];   
                 RestartLevelScene();
             }
             else
             {
-                CurrentPlayer = 2;  
+                CurrentPlayer = Constants.PLAYER_TWO;  
                 RestartLevelScene();
             }
         }
     }
 
+    // Restarts the same scene and sets the "Made Mistake" bools to false
     private void RestartLevelScene()
     {
         Oops = false;
@@ -378,13 +427,16 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     
+    // Checks if it defeats a highscore to change the current highscore with the new highscore otherwise leave it as it is. Checks for both player 1 and Player 2
+    // It will also sets the correct Bool from which highscore is broken to change the highscore itself but also the name it belongs to in the next function
+    // When done it will go the the GetGameEnd function
     private void GameOver()
     { 
-        if (PlayerOneScore > PlayerPrefs.GetInt("HighScore3", 0))
+        if (PlayerOneScore > PlayerPrefs.GetInt("HighScore3", Constants.ZERO))
         {
-            if (PlayerOneScore > PlayerPrefs.GetInt("HighScore2", 0))
+            if (PlayerOneScore > PlayerPrefs.GetInt("HighScore2", Constants.ZERO))
             {
-                if (PlayerOneScore > PlayerPrefs.GetInt("HighScore1", 0))
+                if (PlayerOneScore > PlayerPrefs.GetInt("HighScore1", Constants.ZERO))
                 {
                     NewHighScoreP1 = true;
                     NewHighScoreP1N1 = true;
@@ -420,11 +472,11 @@ public class GameManager : MonoBehaviour
             GetGameEnd();
         }
 
-        if (PlayerTwoScore > PlayerPrefs.GetInt("HighScore3", 0) && SelectedGameMode == GameMode.TwoPlayer)
+        if (PlayerTwoScore > PlayerPrefs.GetInt("HighScore3", Constants.ZERO) && SelectedGameMode == GameMode.TwoPlayer)
         {
-            if (PlayerTwoScore > PlayerPrefs.GetInt("HighScore2", 0))
+            if (PlayerTwoScore > PlayerPrefs.GetInt("HighScore2", Constants.ZERO))
             {
-                if (PlayerTwoScore > PlayerPrefs.GetInt("HighScore1", 0))
+                if (PlayerTwoScore > PlayerPrefs.GetInt("HighScore1", Constants.ZERO))
                 {
                     NewHighScoreP2 = true;
                     NewHighScoreP2N1 = true;
@@ -462,15 +514,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Sets the Sets the End Players Score equal to the actual Player Score and set the current score items active
     private void GetPlayerCurrentScore()
     {
         SetCurrentScoreActive();
         P1S.text = PlayerOneScore.ToString();
         P2S.text = PlayerTwoScore.ToString();
     }
-
+    
     private void GetGameEnd()
-    {
+    {   // Finds the Game Text to give it the correct text based on if the Player won the last level
         Game = GameObject.Find("Game").GetComponent<Text>();
         if (IsGameWon == true)
         {
@@ -482,30 +535,29 @@ public class GameManager : MonoBehaviour
             Game.text = "Game Over";
         }
 
-        else
-        {
-            Debug.Log("Error Checking Game End Status");
-        }
-
+        //
         if (NewHighScoreP1 == false && NewHighScoreP2 == false)
         {
-            Invoke("Back2MainMenu", 10);   
+            Invoke("Back2MainMenu", Constants.WAIT_10_SEC);   
         }
     }
 
+    // Sets the Current Score Inactive and bring you back to the Main Menu
     private void Back2MainMenu()
     {
         SetCurrentScoreInactive();
         SceneManager.LoadScene("MainMenuScene");
     }
     
+    // Gets the High Score of the Top 3 Players
     public void GetHighScore()
     {
-        HighScore1.text = "1. " +  PlayerPrefs.GetString("Nr1", "TMP").ToString() + " Score: " + PlayerPrefs.GetInt("HighScore1", 0).ToString();
-        HighScore2.text = "2. " +  PlayerPrefs.GetString("Nr2", "TMP").ToString() + " Score: " + PlayerPrefs.GetInt("HighScore2", 0).ToString();
-        HighScore3.text = "3. " +  PlayerPrefs.GetString("Nr3", "TMP").ToString() + " Score: " + PlayerPrefs.GetInt("HighScore3", 0).ToString();
+        HighScore1.text = "1. " +  PlayerPrefs.GetString("Nr1", "TMP") + " Score: " + PlayerPrefs.GetInt("HighScore1", Constants.ZERO);
+        HighScore2.text = "2. " +  PlayerPrefs.GetString("Nr2", "TMP") + " Score: " + PlayerPrefs.GetInt("HighScore2", Constants.ZERO);
+        HighScore3.text = "3. " +  PlayerPrefs.GetString("Nr3", "TMP") + " Score: " + PlayerPrefs.GetInt("HighScore3", Constants.ZERO);
     }
 
+    // Sets all HighScores Active
     public void SetHighScoreActive()
     {
         HighScore1.gameObject.SetActive(true);
@@ -513,6 +565,7 @@ public class GameManager : MonoBehaviour
         HighScore3.gameObject.SetActive(true);
     }
     
+    // Sets all HighScores Inactive
     public void SetHighScoreInactive()
     {
         HighScore1.gameObject.SetActive(false);
@@ -521,6 +574,7 @@ public class GameManager : MonoBehaviour
 
     }
     
+    // Set Current Ending Object Active depending on if Player 1 or 2 have beaten the previous High Score
     public void SetCurrentScoreActive()
     {
         if (NewHighScoreP1 == true)
@@ -537,11 +591,12 @@ public class GameManager : MonoBehaviour
         P2S.gameObject.SetActive(true);
     }
     
+    // Set Current Ending Object Inactive depending on if Player 1 or 2 have beaten the previous High Score
     public void SetCurrentScoreInactive()
     {
         if (NewHighScoreP1 == true)
         {
-            NewHighScoreP2 = false;
+            NewHighScoreP1 = false;
             NewHighScoreP1N1 = false;
             NewHighScoreP1N2 = false;
             NewHighScoreP1N3 = false;
@@ -559,6 +614,8 @@ public class GameManager : MonoBehaviour
         P2S.gameObject.SetActive(false);
     }
 
+    // If the Set Name Button has been pressed it will check which Highscore part they had beaten to set new Name and the object to inactive
+    // Wil go to the IsDone function in the end
     public void TriggerInput()
     {
         if (NewHighScoreP1N1 == true)
@@ -596,25 +653,26 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.SetString("Nr3", P2.text);
             P2.gameObject.SetActive(false);
             IsDone();
-
         }
     }
 
+    // Sets the Input Fields Inactive and sets back the Default Values of certain variables for a fresh start
     private void IsDone()
     {
         if (P1.IsActive() == false && P2.IsActive() == false)
         {
-            PlayerOneLives = 3;
-            PlayerTwoLives = 3;
-            PlayerOneCurrentLevel = 1;
-            PlayerTwoCurrentLevel = 1;
-            PlayerOneScore = 0;
-            PlayerTwoScore = 0;
-            levelManager.level = 1;
+            PlayerOneLives = Constants.STANDARD_LIVES;
+            PlayerTwoLives = Constants.STANDARD_LIVES;
+            PlayerOneCurrentLevel = Constants.LVL_1;
+            PlayerTwoCurrentLevel = Constants.LVL_1;
+            PlayerOneScore = Constants.ZERO;
+            PlayerTwoScore = Constants.ZERO;
+            levelManager.level = Constants.ONE;
             Back2MainMenu();
         }
     }
 
+    // Changes the Binding of Pouring by converting certain aspects so it will be compatible with each other and eventually changing the KeyMap
     public void ChangeBindPour()
     {
         PlayerPrefs.SetString("Pour", Pour.text.ToUpper());
@@ -623,6 +681,8 @@ public class GameManager : MonoBehaviour
         GameInputManager.SetKeyMap("Pour", KCP);
     }
     
+    
+    // Changes the Binding of Serving by converting certain aspects so it will be compatible with each other and eventually changing the KeyMap
     public void ChangeBindServe()
     {
         PlayerPrefs.SetString("Serve", Serve.text.ToUpper());
@@ -631,6 +691,7 @@ public class GameManager : MonoBehaviour
         GameInputManager.SetKeyMap("Serve", KCS);
     }
 
+    // Gets the Bindings of Serving and Pouring via converted PlayerPrefs
     public void GetBinds()
     {
         DefaultPourBind.text = PlayerPrefs.GetString("Pour", "X");
@@ -642,6 +703,7 @@ public class GameManager : MonoBehaviour
         GameInputManager.SetKeyMap("Serve", KCS);
     }
     
+    // A Secret Function for the me to delete PlayerPrefs before Shipping
     public void DeletePlayerPrefsKeys()
     {
         PlayerPrefs.DeleteAll();   

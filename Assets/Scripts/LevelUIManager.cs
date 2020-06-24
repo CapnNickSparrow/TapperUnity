@@ -6,14 +6,17 @@ using UnityEngine.UI;
 
 public class LevelUIManager : MonoBehaviour
 {
+    // Connects to Text Objects
     public Text PlayerOneScoreText;
 
     public Text PlayerTwoScoreText;
 
     public Text CurrentLevelText;
 
+    // Sets Transform
     public RectTransform CurrentLevelTextBackground;
 
+    // Get UI Libary
     public UnityEngine.UI.Image ReadyToServeImage;
 
 
@@ -29,13 +32,14 @@ public class LevelUIManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnLevelFinishedLoading;
     }
 
+    // When the Level is finished loading set the text values
     void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode)
     {
         GetUIComponents();
         SetPlayerOneScoreText(GameManager.instance.PlayerOneScore);
         SetPlayerTwoScoreText(GameManager.instance.PlayerTwoScore);
 
-        if (GameManager.instance.CurrentPlayer == 1)
+        if (GameManager.instance.CurrentPlayer == Constants.PLAYER_ONE)
         {
             SetCurrentLevelText(GameManager.instance.PlayerOneCurrentLevel);
         }
@@ -45,10 +49,8 @@ public class LevelUIManager : MonoBehaviour
         }
     }
 
-    void Awake()
-    {
-    }
-
+    
+    // Get the UI Components
     public void GetUIComponents()
     {
         GameObject textObj = GameObject.Find("Player1Score_Text");
@@ -86,18 +88,8 @@ public class LevelUIManager : MonoBehaviour
             ReadyToServeImage = readyToServePanelObj.GetComponent<Image>();
         }
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
+    // Set the New Score Values in the Player One Text Object
     public void SetPlayerOneScoreText(int newScore)
     {
         if (PlayerOneScoreText != null)
@@ -106,6 +98,7 @@ public class LevelUIManager : MonoBehaviour
         }
     }
 
+    // Set the New Score Values in the Player Two Text Object
     public void SetPlayerTwoScoreText(int newScore)
     {
         if (PlayerTwoScoreText != null)
@@ -114,6 +107,7 @@ public class LevelUIManager : MonoBehaviour
         }
     }
 
+    // Set Current Level Text and set Correct Background Width 
     public void SetCurrentLevelText(int newLevel)
     {
         if (CurrentLevelText == null || CurrentLevelTextBackground == null)
@@ -123,25 +117,26 @@ public class LevelUIManager : MonoBehaviour
 
         CurrentLevelText.text = newLevel.ToString();
 
-        // adjust the width of the text background to fit text width
+        // adjust the width of the text background to fit text width (Can be used if you want to implement more levels later)
         Vector2 newSize = CurrentLevelTextBackground.sizeDelta;
 
-        if (newLevel < 10)
+        if (newLevel < Constants.LVL_2_NUMB)
         {
-            newSize.x = 16;
+            newSize.x = Constants.FONT_BG_1;
         }
-        else if (newLevel < 100)
+        else if (newLevel < Constants.LVL_3_NUMB)
         {
-            newSize.x = 32;
+            newSize.x = Constants.FONT_BG_2;
         }
         else
         {
-            newSize.x = 48;
+            newSize.x = Constants.FONT_BG_3;
         }
 
         CurrentLevelTextBackground.sizeDelta = newSize;
     }
 
+    // Set the Get Ready to Serve Image to Active
     public void ToggleReadyToServeImage(bool displayImage)
     {
         if (ReadyToServeImage != null)

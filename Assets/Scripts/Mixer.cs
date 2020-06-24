@@ -23,7 +23,7 @@ public class Mixer : MonoBehaviour
     // Saves the old Slider Value
     private float oldSliderValue;
 
-    private void Start()
+    private void Awake()
     {
         // Gets the components which we need to use
         Mute = GameObject.Find("Toggle").GetComponent<Toggle>();
@@ -32,21 +32,28 @@ public class Mixer : MonoBehaviour
         // Setting a new Slidervalue based on the last saved one and then setting the music as well
         Slider.value = PlayerPrefs.GetFloat("MasterVolume", Constants.MAX_VOLUME);
         mixer.SetFloat("MasterVolume", Mathf.Log10(Slider.value) * Constants.DECIBEL_CONVERT);
-        
+    }
+
+    private void Start()
+    {
         // Checks if the Slidervalue is higher then the minimum value so it will give the toggle the proper function
         if (Slider.value > Constants.MIN_VOLUME)
         {
-            MuteAudio(!enabled);   
+            MuteAudio(!enabled);
         }
         else
         {
-            MuteAudio(enabled);   
+            MuteAudio(enabled);
         }
+        
+        // Sets the Menu Inactive so the volume is loaded from start but the menu isn't active right away
+        GameManager.instance.Menu.SetActive(false);
     }
 
     // Sets the Mixer Value based on the Slider
     public void SetLevel (float sliderValue)
     {
+        print("Trying to setting the slider to " + sliderValue);
         // Saves the old slider value to be reused if double tick the toggle
         if (sliderValue > Constants.MIN_VOLUME)
         {
@@ -54,9 +61,9 @@ public class Mixer : MonoBehaviour
         }
         
         // Converts the Slider Value to a Logarithm Scale and then uses it to be equal like decibels 
-        mixer.SetFloat("MasterVolume", Mathf.Log10(sliderValue) * Constants.DECIBEL_CONVERT);
         PlayerPrefs.SetFloat("MasterVolume", sliderValue);
-        
+        mixer.SetFloat("MasterVolume", Mathf.Log10(sliderValue) * Constants.DECIBEL_CONVERT);
+
         // Checks if the Slidervalue is higher then the minimum value and if it is indeed muted to unmute it 
         if (sliderValue > Constants.MIN_VOLUME && Mute.isOn)
         {
@@ -76,11 +83,9 @@ public class Mixer : MonoBehaviour
         // If it was muted use the old slider value as current value
         if (enabled == false)
         {
-            SetLevel(oldSliderValue);
-
             Slider.value = oldSliderValue;
-            
             PlayerPrefs.SetFloat("MasterVolume", Slider.value);
+            mixer.SetFloat("MasterVolume", Mathf.Log10(Slider.value) * Constants.DECIBEL_CONVERT);
         }
         
         // If it wasn't muted set the value to the minimum

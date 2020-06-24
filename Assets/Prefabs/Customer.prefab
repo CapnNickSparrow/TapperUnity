@@ -166,24 +166,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BeerPrefab: {fileID: 2247375535204651889, guid: d62057e7adcbcb04fa7f31811f23a0ad,
     type: 3}
+  Tip: {fileID: 3067634974581825608, guid: 1db1298b387d75b408b89e2aaa5df7e8, type: 3}
   TapIndex: 0
   HorionztalDir: 1
-  MoveSpeed: 1.5
-  SlideSpeed: 8
-  MinSlideDistance: 2
-  MaxSlideDistance: 4
-  MinDrinkTime: 1
-  MaxDrinkTime: 2
+  MoveSpeed: 0
+  SlideSpeed: 0
+  MinSlideDistance: 0
+  MaxSlideDistance: 0
+  MinDrinkTime: 0
+  MaxDrinkTime: 0
+  RandomMoveTime: 0
+  MinMoveTime: 0
+  MaxMoveTime: 0
+  MinStopTime: 0
+  MaxStopTime: 0
   IsSliding: 0
   IsDistracted: 0
   IsDrinking: 0
-  RandomMoveTime: 0
+  HasDrunk: 0
   IsStopped: 0
-  MinMoveTime: 1.5
-  MaxMoveTime: 3
-  MinStopTime: 0.5
-  MaxStopTime: 2.5
-  Tip: {fileID: 3067634974581825608, guid: 1db1298b387d75b408b89e2aaa5df7e8, type: 3}
 --- !u!82 &7154553840428404356
 AudioSource:
   m_ObjectHideFlags: 0

@@ -5,67 +5,49 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public LayerMask blockingLayer;
-
-    public LayerMask itemsLayer;
-
+    // All Callables for the LevelManagement
     public LevelSettings CurrentLevel;
 
     public List<LevelSettings> AllLevels;
 
+    // Bools to check if the Player made a Mistake
     public bool PlayerMissedCustomer;
     public bool PlayerMissedEmptyMug;
     public bool PlayerThrewExtraMug;
 
-    public int level = 1;
+    // Standard Level is 1
+    public int level = Constants.ONE;
+    
+    // On Awake Define Level Settings
     void Awake()
     {
         InitAllLevelSettings();
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
+    
     // Update is called once per frame
     void Update()
     {
+        // Show the Bar Tabs at all Time
         ShowAllBarTaps();
     }
     
 
     private void ShowAllBarTaps()
     {
+        // Set every BarTap available on Enabled
         foreach (BarTap tap in GetBarTaps())
         {
             tap.GetComponent<SpriteRenderer>().enabled = true;   
         }
     }
 
-    private void CheckIfPlayerIsAtTap()
-    {
-        RaycastHit2D itemHit;
-
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        Player player = playerObj.GetComponent<Player>();
-        BoxCollider2D playerCollider = playerObj.GetComponent<BoxCollider2D>();
-
-        playerCollider.enabled = false;
-        itemHit = Physics2D.Linecast(player.transform.position, player.transform.position, itemsLayer);
-        playerCollider.enabled = true;
-
-        if (itemHit.transform != null)
-        {
-            // something hit, check that it was a Tap
-        }
-    }
-
+    // Check at which BarTap Player is
     public bool IsPlayerAtBarTap(int tapIndex)
     {
         return GetBarTapAtTapIndex(tapIndex).IsPlayerAtTap;
     }
-
+    
+    // Get every BarTap Script of Every BarTap
     public List<BarTap> GetBarTaps()
     {
         GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("BarTap");
@@ -79,6 +61,7 @@ public class LevelManager : MonoBehaviour
         return taps;
     }
 
+    // Get Bar of the Tap Index
     public BarTap GetBarTapAtTapIndex(int tapIndex)
     {
         List<BarTap> availableTaps = GetBarTaps();
@@ -86,13 +69,15 @@ public class LevelManager : MonoBehaviour
         return availableTaps.Where(t => t.TapIndex == tapIndex).FirstOrDefault();
     }
 
+    // Get the First BarTap
     public BarTap GetFirstBarTap()
     {
         List<BarTap> availableTaps = GetBarTaps();
 
-        return availableTaps.Where(t => t.TapIndex == 1).FirstOrDefault();
+        return availableTaps.Where(t => t.TapIndex == Constants.ONE).FirstOrDefault();
     }
 
+    // Get the Last BarTap
     public BarTap GetLastBarTap()
     {
         List<BarTap> availableTaps = GetBarTaps();
@@ -102,121 +87,135 @@ public class LevelManager : MonoBehaviour
         return availableTaps.Where(t => t.TapIndex == maxIndex).FirstOrDefault();
     }
 
+    // Get and Return the Player Bottle Speed Value
     public float GetPlayerBeerSpeed()
     {
         return CurrentLevel.PlayerBeerSpeed;
     }
 
+    // Get and Return the Customer Move Speed Value
     public float GetCustomerMoveSpeed()
     {
         return CurrentLevel.CustomerMoveSpeed;
     }
 
+    // Get and Return the Customer Slide Speed Value
     public float GetCustomerSlideSpeed()
     {
         return CurrentLevel.CustomerSlideSpeed;
     }
 
+    // Get and Return the Customer Minimal Stop Time Value
     public float GetMinCustomerStopTime()
     {
-        return CurrentLevel.CustomerStopTimes[0];
+        return CurrentLevel.CustomerStopTimes[Constants.ZERO];
     }
 
+    // Get and Return the Customer Maximal Stop Time Value
     public float GetMaxCustomerStopTime()
     {
-        return CurrentLevel.CustomerStopTimes[1];
+        return CurrentLevel.CustomerStopTimes[Constants.ONE];
     }
 
+    // Get and Return the Customer Minimal Move Time Value
     public float GetMinCustomerMoveTime()
     {
-        return CurrentLevel.CustomerMoveTimes[0];
+        return CurrentLevel.CustomerMoveTimes[Constants.ZERO];
     }
 
+    // Get and Return the Customer Maximal Move Time Value
     public float GetMaxCustomerMoveTime()
     {
-        return CurrentLevel.CustomerMoveTimes[1];
+        return CurrentLevel.CustomerMoveTimes[Constants.ONE];
     }
 
+    // Get and Return the Customer Minimal Slide Distance Value
     public float GetMinCustomerSlideDistance()
     {
-        return CurrentLevel.CustomerSlideDistances[0];
+        return CurrentLevel.CustomerSlideDistances[Constants.ZERO];
     }
 
+    // Get and Return the Customer Maximal Slide Distance Value
     public float GetMaxCustomerSlideDistance()
     {
-        return CurrentLevel.CustomerSlideDistances[1];
+        return CurrentLevel.CustomerSlideDistances[Constants.ONE];
     }
 
+    // Set Per Level Information
     private void InitAllLevelSettings()
     {
         AllLevels = new List<LevelSettings>();
 
+        // Level 1 Information
         LevelSettings level1 = new LevelSettings()
         {
-            Level = 1,
-            PlayerBeerSpeed = 6,
-            CustomerMoveSpeed = 1.25f,
-            CustomerSlideSpeed = 5
+            Level = Constants.LVL_1,
+            PlayerBeerSpeed = Constants.BOTTLE_SPEED,
+            CustomerMoveSpeed = Constants.MOVE_SPEED_1,
+            CustomerSlideSpeed = Constants.SLIDE_SPEED
         };
-        level1.SetCustomerMoveTimes(0.5f, 1);
-        level1.SetCustomerStopTimes(2, 3);
-        level1.SetCustomerDrinkTimes(1.0f, 1.75f);
-        level1.SetCustomerSlideDistances(3, 6);
+        level1.SetCustomerMoveTimes(Constants.MOVE_MIN_1, Constants.MOVE_MAX_1);
+        level1.SetCustomerStopTimes(Constants.STOP_MIN_1, Constants.STOP_MAX_1);
+        level1.SetCustomerDrinkTimes(Constants.DRINK_MIN_1, Constants.DRINK_MAX_1);
+        level1.SetCustomerSlideDistances(Constants.SLIDE_MIN, Constants.SLIDE_MAX);
 
-        level1.AddCustomersToBarTap(1, new List<float>() { 0.25f });
-        level1.AddCustomersToBarTap(2, new List<float>() { 0.25f });
-        level1.AddCustomersToBarTap(3, new List<float>() { 0.25f });
-        level1.AddCustomersToBarTap(4, new List<float>() { 0.25f });
+        level1.AddCustomersToBarTap(Constants.BARTAP_1, new List<float>() { Constants.WAVE_1 });
+        level1.AddCustomersToBarTap(Constants.BARTAP_2, new List<float>() { Constants.WAVE_1 });
+        level1.AddCustomersToBarTap(Constants.BARTAP_3, new List<float>() { Constants.WAVE_1 });
+        level1.AddCustomersToBarTap(Constants.BARTAP_4, new List<float>() { Constants.WAVE_1 });
 
         AllLevels.Add(level1);
 
+        // Level 2 Information
         LevelSettings level2 = new LevelSettings()
         {
-            Level = 2,
-            PlayerBeerSpeed = 6,
-            CustomerMoveSpeed = 1.5f,
-            CustomerSlideSpeed = 5
+            Level = Constants.LVL_2,
+            PlayerBeerSpeed = Constants.BOTTLE_SPEED,
+            CustomerMoveSpeed = Constants.MOVE_SPEED_2,
+            CustomerSlideSpeed = Constants.SLIDE_SPEED
         };
-        level2.SetCustomerMoveTimes(0.6f, 1.2f);
-        level2.SetCustomerStopTimes(2, 2.5f);
-        level2.SetCustomerDrinkTimes(1.0f, 2.0f);
-        level2.SetCustomerSlideDistances(3, 6);
+        level2.SetCustomerMoveTimes(Constants.MOVE_MIN_2, Constants.MOVE_MAX_2);
+        level2.SetCustomerStopTimes(Constants.STOP_MIN_1, Constants.STOP_MAX_2);
+        level2.SetCustomerDrinkTimes(Constants.DRINK_MIN_1, Constants.DRINK_MAX_2);
+        level2.SetCustomerSlideDistances(Constants.SLIDE_MIN, Constants.SLIDE_MAX);
 
-        level2.AddCustomersToBarTap(1, new List<float>() { 0.25f, 1 });
-        level2.AddCustomersToBarTap(2, new List<float>() { 0.25f, 1 });
-        level2.AddCustomersToBarTap(3, new List<float>() { 0.25f, 1 });
-        level2.AddCustomersToBarTap(4, new List<float>() { 0.25f, 1 });
+        level2.AddCustomersToBarTap(Constants.BARTAP_1, new List<float>() { Constants.WAVE_1, Constants.WAVE_3 });
+        level2.AddCustomersToBarTap(Constants.BARTAP_2, new List<float>() { Constants.WAVE_1, Constants.WAVE_3 });
+        level2.AddCustomersToBarTap(Constants.BARTAP_3, new List<float>() { Constants.WAVE_1, Constants.WAVE_3 });
+        level2.AddCustomersToBarTap(Constants.BARTAP_4, new List<float>() { Constants.WAVE_1, Constants.WAVE_3 });
 
         AllLevels.Add(level2);
         
+        // Level 3 Information
         LevelSettings level3 = new LevelSettings()
         {
-            Level = 3,
-            PlayerBeerSpeed = 6,
-            CustomerMoveSpeed = 1.75f,
-            CustomerSlideSpeed = 5
+            Level = Constants.LVL_3,
+            PlayerBeerSpeed = Constants.BOTTLE_SPEED,
+            CustomerMoveSpeed = Constants.MOVE_SPEED_3,
+            CustomerSlideSpeed = Constants.SLIDE_SPEED
         };
-        level3.SetCustomerMoveTimes(0.75f, 1.25f);
-        level3.SetCustomerStopTimes(1.75f, 2.25f);
-        level3.SetCustomerDrinkTimes(0.75f, 2.25f);
-        level3.SetCustomerSlideDistances(3, 6);
+        level3.SetCustomerMoveTimes(Constants.MOVE_MIN_3, Constants.MOVE_MAX_3);
+        level3.SetCustomerStopTimes(Constants.STOP_MIN_2, Constants.STOP_MAX_3);
+        level3.SetCustomerDrinkTimes(Constants.DRINK_MIN_2, Constants.DRINK_MAX_3);
+        level3.SetCustomerSlideDistances(Constants.SLIDE_MIN, Constants.SLIDE_MAX);
 
-        level3.AddCustomersToBarTap(1, new List<float>() { 0.5f, 1.25f, 1.5f });
-        level3.AddCustomersToBarTap(2, new List<float>() { 0.5f, 1.25f, 1.5f });
-        level3.AddCustomersToBarTap(3, new List<float>() { 0.5f, 1.25f, 1.5f });
-        level3.AddCustomersToBarTap(4, new List<float>() { 0.5f, 1.25f, 1.5f });
+        level3.AddCustomersToBarTap(Constants.BARTAP_1, new List<float>() { Constants.WAVE_2, Constants.WAVE_4, Constants.WAVE_5 });
+        level3.AddCustomersToBarTap(Constants.BARTAP_2, new List<float>() { Constants.WAVE_2, Constants.WAVE_4, Constants.WAVE_5 });
+        level3.AddCustomersToBarTap(Constants.BARTAP_3, new List<float>() { Constants.WAVE_2, Constants.WAVE_4, Constants.WAVE_5 });
+        level3.AddCustomersToBarTap(Constants.BARTAP_4, new List<float>() { Constants.WAVE_2, Constants.WAVE_4, Constants.WAVE_5 });
 
         AllLevels.Add(level3);
     }
 }
 
+// Sets the Settings for Current Level
 public class LevelSettings
 {
     public int Level;
 
     public Dictionary<int, List<float>> StartingCustomers;
 
-    public float PlayerBeerSpeed = 7.0f;
+    public float PlayerBeerSpeed = Constants.BOTTLE_SPEED;
 
     public float CustomerMoveSpeed;
 
@@ -230,6 +229,7 @@ public class LevelSettings
 
     public List<float> CustomerSlideDistances;
 
+    // Sets the new Customer Move Times
     public void SetCustomerMoveTimes(float min, float max)
     {
         CustomerMoveTimes = new List<float>();
@@ -237,6 +237,7 @@ public class LevelSettings
         CustomerMoveTimes.Add(max);
     }
 
+    // Sets the new Customer Stop Times
     public void SetCustomerStopTimes(float min, float max)
     {
         CustomerStopTimes = new List<float>();
@@ -244,6 +245,7 @@ public class LevelSettings
         CustomerStopTimes.Add(max);
     }
 
+    // Sets the new Custome Drink Times
     public void SetCustomerDrinkTimes(float min, float max)
     {
         CustomerDrinkTimes = new List<float>();
@@ -251,6 +253,7 @@ public class LevelSettings
         CustomerDrinkTimes.Add(max);
     }
 
+    // Sets the new Customer Slide Distances
     public void SetCustomerSlideDistances(float min, float max)
     {
         CustomerSlideDistances = new List<float>();
@@ -258,11 +261,13 @@ public class LevelSettings
         CustomerSlideDistances.Add(max);
     }
 
+    // Sets the First Customers
     public LevelSettings()
     {
         StartingCustomers = new Dictionary<int, List<float>>();
     }
 
+    // Adds Customer to the Correct Tap and Sets Position
     public void AddCustomersToBarTap(int bartap_index, List<float> customer_offsets)
     {
         if (StartingCustomers == null)

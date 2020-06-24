@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class BarTap : MonoBehaviour
 {
+    // Ints
     public int TapIndex;
-
+    
+    // Bools
     public bool IsPlayerAtTap;
 
     public bool IsFlipped;
@@ -13,18 +15,16 @@ public class BarTap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // Renders the Tap Sprite
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
         IsFlipped = renderer.flipX;
+        
+        // Player isn't standard at the tap
         IsPlayerAtTap = false;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    // Get the Location of the Vector
     public Vector3 GetShiftPositionVector()
     {
         BoxCollider2D tapCollider = GetComponent<BoxCollider2D>();

@@ -6,12 +6,12 @@ using System;
 public static class GameInputManager
 {
     static Dictionary<string, KeyCode> keyMapping;
-    static string[] keyMaps = new string[2]
+    static string[] keyMaps = new string[Constants.KEYMAPS]
     {
         "Pour",
         "Serve"
     };
-    static KeyCode[] defaults = new KeyCode[2]
+    static KeyCode[] defaults = new KeyCode[Constants.KEYMAPS]
     {
         KeyCode.X,
         KeyCode.Z
@@ -25,7 +25,7 @@ public static class GameInputManager
     private static void InitializeDictionary()
     {
         keyMapping = new Dictionary<string, KeyCode>();
-        for(int i=0;i<keyMaps.Length;++i)
+        for(int i=Constants.ZERO;i<keyMaps.Length;++i)
         {
             keyMapping.Add(keyMaps[i], defaults[i]);
         }

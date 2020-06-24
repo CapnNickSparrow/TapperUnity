@@ -587,18 +587,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 196324097, guid: e0719d1fa77a8a547b68a29191522c21, type: 3}
-      propertyPath: m_Text
-      value: ': 250 Points'
-      objectReference: {fileID: 0}
-    - target: {fileID: 725811600, guid: e0719d1fa77a8a547b68a29191522c21, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 970150816, guid: e0719d1fa77a8a547b68a29191522c21, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2051218313, guid: e0719d1fa77a8a547b68a29191522c21, type: 3}
       propertyPath: m_Controller
       value: 

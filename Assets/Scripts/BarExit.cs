@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class BarExit : MonoBehaviour
 {
+    // Ints
     public int TapIndex;
-
-    public bool IsFlipped;
-
+    
     public int CustomerLimit;
     
+    // Bools
+    public bool IsFlipped;
+
+    // Floats
     [SerializeField]
     private float SpawnCoolDownTime;
     [SerializeField]
@@ -43,7 +46,7 @@ public class BarExit : MonoBehaviour
         IsFlipped = renderer.flipX;   
         
         // Cooltime starts at 0 so the customers can begin to spawn
-        cooldownTimer = 0;
+        cooldownTimer = Constants.ZERO;
     }
 
     // Update is called once per frame
@@ -54,7 +57,7 @@ public class BarExit : MonoBehaviour
         {
             // Spawns another customer and set the timer to 0 again
             SpawnCustomer();
-            cooldownTimer = 0;
+            cooldownTimer = Constants.ZERO;
         }
         else
         {
@@ -66,7 +69,7 @@ public class BarExit : MonoBehaviour
     int GetCustomerCount()
     {
         // Standard is and for each customer with the tag "Customer" it will count 1+ and will return a value
-        int customerCount = 0;
+        int customerCount = Constants.ZERO;
         GameObject[] customers = GameObject.FindGameObjectsWithTag("Customer");
 
         foreach (GameObject customer in customers)
@@ -84,12 +87,12 @@ public class BarExit : MonoBehaviour
     // Spawns Customer
     void SpawnCustomer()
     {
-        int customerDir = IsFlipped ? -1 : 1;
+        int customerDir = IsFlipped ? Constants.MIN_ONE : Constants.ONE;
 
         float customerOffsetX = Random.Range(Constants.MIN_OFFSET_X, Constants.MAX_OFFSET_X);
 
         // Spawns the GameObject
-        GameObject customerObj = Instantiate(CustomerPrefab, transform.position + new Vector3(customerDir * customerOffsetX, Constants.CUSTOMER_OFFSET_Y, 0), transform.rotation);
+        GameObject customerObj = Instantiate(CustomerPrefab, transform.position + new Vector3(customerDir * customerOffsetX, Constants.CUSTOMER_OFFSET_Y, Constants.ZERO), transform.rotation);
         
         
         // Sets the values for the customer

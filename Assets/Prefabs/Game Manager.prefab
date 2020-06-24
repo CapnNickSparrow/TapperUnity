@@ -1896,7 +1896,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &970150817
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5336,8 +5336,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelManager: {fileID: 0}
   levelUIManager: {fileID: 0}
-  HappyCustomer: 20
   SelectedGameMode: 0
+  CurrentPlayer: 1
+  PlayerTwoScore: 0
+  PlayerTwoCurrentLevel: 0
+  PlayerTwoLives: 0
+  PlayerOneScore: 0
+  PlayerOneCurrentLevel: 0
+  PlayerOneLives: 0
+  HappyCustomer: 20
   HasLevelStarted: 0
   Oops: 0
   OopsC: 0
@@ -5353,10 +5360,6 @@ MonoBehaviour:
   NewHighScoreP2N1: 0
   NewHighScoreP2N2: 0
   NewHighScoreP2N3: 0
-  CurrentPlayer: 1
-  PlayerOneScore: 0
-  PlayerOneCurrentLevel: 0
-  PlayerOneLives: 0
   Menu: {fileID: 696291473}
   ScorePal: {fileID: 970150816}
   HighScore1: {fileID: 598135228}
@@ -5373,9 +5376,6 @@ MonoBehaviour:
   P2: {fileID: 1858358334}
   Serve: {fileID: 1566450388}
   Pour: {fileID: 280481953}
-  PlayerTwoScore: 0
-  PlayerTwoCurrentLevel: 0
-  PlayerTwoLives: 0
   KCP: 0
   KCS: 0
 --- !u!114 &3543574402769468581
@@ -5390,12 +5390,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0978a7ec167ffc2419653a977d450584, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blockingLayer:
-    serializedVersion: 2
-    m_Bits: 256
-  itemsLayer:
-    serializedVersion: 2
-    m_Bits: 1
   PlayerMissedCustomer: 0
   PlayerMissedEmptyMug: 0
   PlayerThrewExtraMug: 0

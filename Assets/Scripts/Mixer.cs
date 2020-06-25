@@ -45,15 +45,11 @@ public class Mixer : MonoBehaviour
         {
             MuteAudio(enabled);
         }
-        
-        // Sets the Menu Inactive so the volume is loaded from start but the menu isn't active right away
-        GameManager.instance.Menu.SetActive(false);
     }
 
     // Sets the Mixer Value based on the Slider
     public void SetLevel (float sliderValue)
     {
-        print("Trying to setting the slider to " + sliderValue);
         // Saves the old slider value to be reused if double tick the toggle
         if (sliderValue > Constants.MIN_VOLUME)
         {
@@ -84,7 +80,9 @@ public class Mixer : MonoBehaviour
         if (enabled == false)
         {
             Slider.value = oldSliderValue;
+            
             PlayerPrefs.SetFloat("MasterVolume", Slider.value);
+            
             mixer.SetFloat("MasterVolume", Mathf.Log10(Slider.value) * Constants.DECIBEL_CONVERT);
         }
         

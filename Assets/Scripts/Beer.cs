@@ -156,7 +156,7 @@ public class Beer : MonoBehaviour
             waitTime += Time.deltaTime;
 
             Vector2 start = transform.position;
-            Vector2 end = start + new Vector2(Constants.ZERO, Constants.ONE);
+            Vector2 end = start + new Vector2(Constants.ZERO, Constants.MIN_ONE);
 
             Vector3 newPos = Vector3.MoveTowards(rBody.position, end, Speed * Time.deltaTime);
             rBody.MovePosition(newPos);   

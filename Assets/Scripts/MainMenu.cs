@@ -16,14 +16,19 @@ public class MainMenu : MonoBehaviour
     private float RemoveAfter;
 
     // Bools
-    private bool NoMenu = true;
+    private bool NoMenu;
     private bool HasntPressed = true;
     
     void Start()
     {
-        // Set Menu to true to get Mixer Info (Will be set inactive right away via the Mixer Script)
-        GameManager.instance.MenuRef.gameObject.SetActive(true);
+        // Set NoMenu to false so Menu can Open
+        NoMenu = true;
         
+        // Set Menu Quickly Active for a Second and then turn it off to get info from the Mixer
+        GameManager.instance.Menu.gameObject.SetActive(true);
+        GameManager.instance.Menu.gameObject.SetActive(false);
+        GameManager.instance.MenuRef.gameObject.SetActive(true);
+
         // Sets the Timing Values to set Objects Active and Inactive
         ShowAfter = Constants.BEFORE_SHOW / Constants.SPEED / Constants.SAMPLES;
         RemoveAfter = Constants.AFTER_SHOW / Constants.SPEED / Constants.SAMPLES;
@@ -65,14 +70,12 @@ public class MainMenu : MonoBehaviour
         // The Player Press "O" or "H" the menu overlay will pop up with settings and set NoMenu to false, so the User can't select amount of players when he is in the menu 
         if ((Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.H)) && NoMenu)
         {
-            NoMenu = false;
             OpenMenu();
         }
         
         // The Player Press "O" or "H" the menu overlay will pop down with settings and set NoMenu to true, so the User can't select amount of players
         else if ((Input.GetKeyDown(KeyCode.O) || Input.GetKeyDown(KeyCode.H)) && !NoMenu)
         {
-            NoMenu = true;
             CloseMenu();
         }
     }
@@ -110,8 +113,9 @@ public class MainMenu : MonoBehaviour
     // Opens up the Menu Items and set Reference Information to false
     private void OpenMenu()
     {
-        GameManager.instance.MenuRef.gameObject.SetActive(false);
         GameManager.instance.Menu.gameObject.SetActive(true);
+        GameManager.instance.MenuRef.gameObject.SetActive(false);
+        NoMenu = false;
     }
     
     // Closes up the Menu Items and set Reference Information to true
@@ -119,5 +123,6 @@ public class MainMenu : MonoBehaviour
     {
         GameManager.instance.Menu.gameObject.SetActive(false);
         GameManager.instance.MenuRef.gameObject.SetActive(true);
+        NoMenu = true;
     }
 }
